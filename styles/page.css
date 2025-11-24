@@ -1,0 +1,334 @@
+/* ===== Global base styles (applied to entire site) ===== */
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth; /* Smooth scrolling for in-page jumps */
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(
+    1200px 800px at 10% -20%,
+    #0d1a24,
+    #090f14 60%,
+    #070b0e
+  );
+  color: #e6eef7;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI,
+    Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+}
+
+a {
+  color: inherit; /* Links inherit text color by default */
+}
+
+/* ===== Layout & page structure ===== */
+
+.site {
+  max-width: 1100px;          /* Centered fixed width layout */
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.header {
+  display: grid;
+  gap: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero {
+  position: relative;
+  padding: 6px 0;
+}
+
+/* Big name text with animated gradient */
+.name {
+  margin: 0 0 4px;
+  font-size: 42px;
+  line-height: 1.08;
+  letter-spacing: 0.2px;
+  background: linear-gradient(
+    90deg,
+    #cfeaff,
+    #8dd0ff,
+    #e6eef7
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 8s linear infinite;
+}
+
+/* Gradient shimmer animation for name */
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.subtitle {
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* ===== Top navigation (section pills) ===== */
+
+.nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  opacity: 0.95;
+}
+
+/* Nav items are buttons styled like small pills */
+.nav button {
+  color: #bfe6ff;
+  text-decoration: none;
+  border: 1px solid #1a2a38;
+  background: #0f1c27;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease,
+    transform 150ms ease;
+}
+
+.nav button:hover {
+  background: #122435;
+  border-color: #224158;
+  transform: translateY(-1px);
+}
+
+/* ===== Contact strip under header ===== */
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  opacity: 0.9;
+}
+
+.contact a {
+  color: #8dd0ff;
+  text-decoration: none;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+}
+
+/* Reusable text-style button (for "Copy email") */
+.link-btn {
+  background: transparent;
+  color: #8dd0ff;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+/* ===== Sections & cards ===== */
+
+.section {
+  margin-top: 32px;
+}
+
+/* Responsive grid used for project cards */
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(280px, 1fr)
+  );
+}
+
+/* Thin separator line between top and bottom rows of project cards */
+.grid-separator {
+  grid-column: 1 / -1;
+  height: 1px;
+  margin: 6px 0 10px;
+  background: #1c2a34;
+  opacity: 0.4;
+}
+
+/* Generic card container used for header, education, skills, etc. */
+.card {
+  background: #101820;
+  border: 1px solid #14202a;
+  border-radius: 14px;
+  padding: 18px 18px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* ===== Headings ===== */
+
+.h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.h4 {
+  margin: 18px 0 8px;
+  font-size: 15px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Bullet lists (experience, education, leadership) ===== */
+
+.bullets {
+  margin: 8px 0 0 24px; /* Indent bullets like a resume tab */
+  padding-left: 4px;
+}
+
+.bullets li {
+  margin: 4px 0;
+  line-height: 1.6;
+}
+
+/* ===== Badge rows (skills, tags, role badges) ===== */
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Spacing between badges so text never glues together */
+  margin: 6px 0 8px;
+}
+
+/* Pill-style badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: #0e2433;
+  border: 1px solid #183449;
+  border-radius: 999px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ===== Footer ===== */
+
+.footer {
+  margin-top: 40px;
+  opacity: 0.6;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ===== Reveal-on-scroll transitions ===== */
+
+.reveal,
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 800ms ease, transform 800ms ease;
+}
+
+.reveal.in,
+[data-reveal].in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Accessibility: disable motion for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  [data-reveal],
+  .reveal.in,
+  [data-reveal].in {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ===== Project cards (inside the Projects section) ===== */
+
+/* Base project card: inherits .card but adds hover animation */
+.card.project {
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+/* Hover effect: lift slightly, stronger shadow, nicer border */
+.card.project:hover {
+  transform: translateY(-4px);
+  border-color: #274055;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Optional: a bit of spacing above the description */
+.project-desc {
+  margin-top: 6px;
+}
+
+/* Container for project tags (reuses .badge-row layout) */
+.project-tags {
+  margin-top: 8px;
+}
+
+/* Individual project tags: mild bold + slight underline,
+   but ONLY for project tags (does not touch Skills badges). */
+.project-tag {
+  font-weight: 600;                  /* “mild” bold */
+  text-decoration: underline;        /* slight underline */
+  text-decoration-thickness: 1px;    /* thin line */
+  text-underline-offset: 2px;        /* small offset below text */
+}
+
+/* Project tags: mild bold + underline, but NOT pill-shaped */
+.project-tag {
+  /* cancel the pill look coming from .badge */
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+
+  /* keep the “mild bold + slight underline” look */
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+/* For PDF Download */
+.pdf-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #0e2433;
+  border: 1px solid #224158;
+  color: #bfe6ff;
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  z-index: 999;
+}
+
+.pdf-btn:hover {
+  background: #132c40;
+}
