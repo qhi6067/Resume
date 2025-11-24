@@ -1,10 +1,4 @@
-// components/ExperienceSlots.js
-// VIEW + CONTROLLER for the interactive "Experience" carousel.
-//
-// - Shows horizontal cards for each job
-// - Supports left/right buttons and keyboard arrows
-// - Detail panel with bullets and progress dots
-// - Fancy tilt effect on hover
+
 
 "use client"; // Uses React hooks + browser APIs (must run on client)
 
@@ -34,15 +28,40 @@ export function ExperienceSlots({ items }) {
   // Array of refs, one per card, for tilt and scroll calculations.
   const cardRefs = useRef([]);
 
+  // Touch tracking for swipe gestures (mobile).
+  const touchStartXRef = useRef(null);
+
+  /**
+   * Helper: go to previous role (if not already at first).
+   */
+  const goPrev = () => {
+    setActiveIndex((current) => {
+      const nextIndex = Math.max(0, current - 1);
+      // If we actually changed, collapse bullets.
+      if (nextIndex !== current) setIsExpanded(false);
+      return nextIndex;
+    });
+  };
+
+  /**
+   * Helper: go to next role (if not already at last).
+   */
+  const goNext = () => {
+    setActiveIndex((current) => {
+      const nextIndex = Math.min(items.length - 1, current + 1);
+      if (nextIndex !== current) setIsExpanded(false);
+      return nextIndex;
+    });
+  };
+
   /**
    * Hook: keyboard navigation (← / → keys)
    * The controller calls our callback with +1 (right) or -1 (left).
+   * (Works on all viewports, but arrows are visually hidden on mobile.)
    */
   useKeyNav((delta) => {
-    setActiveIndex((currentIndex) =>
-      Math.max(0, Math.min(items.length - 1, currentIndex + delta))
-    );
-    setIsExpanded(false); // collapse bullets when changing job
+    if (delta === 1) goNext();
+    if (delta === -1) goPrev();
   });
 
   /**
@@ -100,6 +119,39 @@ export function ExperienceSlots({ items }) {
     card.style.setProperty("--ry", "0deg");
   };
 
+  /**
+   * Touch handlers for swipe on mobile.
+   * - We store the starting X coordinate on touchstart.
+   * - On touchend we compare start vs end to decide swipe direction.
+   */
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+    touchStartXRef.current = touch.clientX;
+  };
+
+  const handleTouchEnd = (event) => {
+    const startX = touchStartXRef.current;
+    if (startX == null) return;
+
+    const touch = event.changedTouches[0];
+    const endX = touch.clientX;
+    const deltaX = endX - startX;
+
+    // Minimal distance for it to count as a swipe gesture.
+    const SWIPE_THRESHOLD = 50;
+
+    if (deltaX > SWIPE_THRESHOLD) {
+      // Swipe right → go to previous card.
+      goPrev();
+    } else if (deltaX < -SWIPE_THRESHOLD) {
+      // Swipe left → go to next card.
+      goNext();
+    }
+
+    // Reset for next gesture.
+    touchStartXRef.current = null;
+  };
+
   // Convenience: active experience object.
   const activeItem = items[activeIndex];
 
@@ -112,13 +164,10 @@ export function ExperienceSlots({ items }) {
     <div className="slots" data-reveal>
       {/* =================== CARD STRIP WITH ARROWS =================== */}
       <div className="slots-bar">
-        {/* Previous button */}
+        {/* Previous button (hidden on small screens via CSS) */}
         <button
           className="nav-btn"
-          onClick={() => {
-            setActiveIndex((current) => Math.max(0, current - 1));
-            setIsExpanded(false);
-          }}
+          onClick={goPrev}
           disabled={activeIndex === 0}
           aria-label="Previous role"
           title="Previous"
@@ -126,8 +175,13 @@ export function ExperienceSlots({ items }) {
           ‹
         </button>
 
-        {/* Scrollable wrapper for cards */}
-        <div className="slots-wrap" ref={slotsWrapRef}>
+        {/* Scrollable wrapper for cards + swipe support */}
+        <div
+          className="slots-wrap"
+          ref={slotsWrapRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="slots-track">
             {items.map((role, index) => (
               <div
@@ -167,15 +221,10 @@ export function ExperienceSlots({ items }) {
           </div>
         </div>
 
-        {/* Next button */}
+        {/* Next button (hidden on small screens via CSS) */}
         <button
           className="nav-btn"
-          onClick={() => {
-            setActiveIndex((current) =>
-              Math.min(items.length - 1, current + 1)
-            );
-            setIsExpanded(false);
-          }}
+          onClick={goNext}
           disabled={activeIndex === items.length - 1}
           aria-label="Next role"
           title="Next"
@@ -185,18 +234,13 @@ export function ExperienceSlots({ items }) {
       </div>
 
       {/* =================== DETAIL PANEL =================== */}
-      <article className="detail  reveal" data-reveal> {/*can add card to encapsulate later */}
+      <article className="detail card reveal" data-reveal>
         {/* Job title + company + dates + badges */}
         <div className="detail-head">
           <div className="role">
             {/* Title + company in bold line */}
             <span className="title">{activeItem.title}</span>
-            <span className="company">
-              {" "}
-              | {activeItem.company}
-            </span>
-
-            {/* Add space with margin so date doesn't touch company text */}
+            <span className="company"> | {activeItem.company}</span>
             <span className="dates">{activeItem.dates}</span>
           </div>
 
@@ -253,7 +297,7 @@ export function ExperienceSlots({ items }) {
           gap: 8px;
         }
 
-        /* Left/right arrow buttons */
+        /* Left/right arrow buttons (desktop/tablet) */
         .nav-btn {
           width: 40px;
           height: 40px;
@@ -343,7 +387,7 @@ export function ExperienceSlots({ items }) {
         }
 
         .detail-head .dates {
-          margin-left: 8px; /* creates space between company and date */
+          margin-left: 8px; /* space between company and date */
           font-weight: 400;
           opacity: 0.85;
         }
@@ -395,47 +439,23 @@ export function ExperienceSlots({ items }) {
           background: #8dd0ff;
         }
 
-        /* ======= MOBILE TWEAKS FOR EXPERIENCE (≤ 768px) ======= */
+        /* ===== MOBILE: hide arrows, center strip ===== */
         @media (max-width: 768px) {
-          /* Slightly tighter spacing */
-          .slots {
-            gap: 10px;
-          }
-
-          /* Stack nav buttons above/below cards on small screens */
           .slots-bar {
-            grid-template-columns: 1fr;
-            grid-template-rows: auto auto auto;
-            row-gap: 6px;
-            justify-items: center;
-          }
-
-          /* Put card strip in the middle row */
-          .slots-wrap {
-            width: 100%;
-            order: 2;
+            grid-template-columns: 1fr; /* no side columns for arrows */
           }
 
           .nav-btn {
-            width: 32px;
-            height: 32px;
+            display: none; /* hide arrow buttons on mobile */
           }
 
-          /* Allow card to take full width while still scrollable */
+          .slots-wrap {
+            /* allow easy thumb access */
+            padding: 2px 0;
+          }
+
           .slot-card {
             min-width: 260px;
-            max-width: 100%;
-          }
-
-          /* Title / company / dates on separate lines for readability */
-          .detail-head .role {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 2px;
-          }
-
-          .detail-head .dates {
-            margin-left: 0;
           }
         }
       `}</style>
