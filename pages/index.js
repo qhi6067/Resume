@@ -132,32 +132,30 @@ export default function Page() {
 
           {/* Contact strip under header */}
           <div className="contact">
-            {/* Email link */}
-            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-            <span>•</span>
-
-            {/* Phone link (digits only in tel: href) */}
-            <a href={`tel:${CONTACT.phone.replace(/[^0-9]/g, "")}`}>
-              {CONTACT.phone}
-            </a>
-            <span>•</span>
-
-            {/* Location + citizenship */}
-            <span>{CONTACT.location}</span>
-            <span>•</span>
-            <span>{CONTACT.citizenship}</span>
-            <span>•</span>
-
-            {/* Copy email button */}
-            <button
-              className="link-btn"
-              onClick={handleCopyEmail}
-              aria-label="Copy email to clipboard"
-              title="Copy email"
-            >
-              Copy email
-            </button>
+            <ul className="contact-list">
+              <li>
+                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+              </li>
+              <li>
+                <a href={`tel:${CONTACT.phone.replace(/[^0-9]/g, "")}`}>
+                  {CONTACT.phone}
+                </a>
+              </li>
+              <li>{CONTACT.location}</li>
+              <li>{CONTACT.citizenship}</li>
+              <li>
+                <button
+                  className="link-btn"
+                  onClick={handleCopyEmail}
+                  aria-label="Copy email to clipboard"
+                  title="Copy email"
+                >
+                  Copy email
+                </button>
+              </li>
+            </ul>
           </div>
+
         </header>
 
         {/* ============== EXPERIENCE ============== */}
