@@ -434,5 +434,10 @@ a {
       padding: 5px 10px;
       font-size: 11px;
     }
+
+    /* Hide the key arrow on mob */
+    .exp-nav-btn{
+      display: none;
+    }
   }
   
