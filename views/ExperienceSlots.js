@@ -286,17 +286,11 @@ export function ExperienceSlots({ items }) {
           --ry: 0deg;
           min-width: 280px;
           max-width: 320px;
-          background: radial-gradient(
-            120% 140% at 0% 0%,
-            #0f1e2a,
-            #0b1116
-          );
+          background: radial-gradient(120% 140% at 0% 0%, #0f1e2a, #0b1116);
           border: 1px solid #182532;
           border-radius: 16px;
           box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-          transform: perspective(800px)
-            rotateX(var(--rx))
-            rotateY(var(--ry));
+          transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));
           transition: transform 240ms ease, border-color 240ms ease,
             box-shadow 240ms ease;
           will-change: transform;
@@ -399,6 +393,50 @@ export function ExperienceSlots({ items }) {
 
         .dot.on {
           background: #8dd0ff;
+        }
+
+        /* ======= MOBILE TWEAKS FOR EXPERIENCE (≤ 768px) ======= */
+        @media (max-width: 768px) {
+          /* Slightly tighter spacing */
+          .slots {
+            gap: 10px;
+          }
+
+          /* Stack nav buttons above/below cards on small screens */
+          .slots-bar {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
+            row-gap: 6px;
+            justify-items: center;
+          }
+
+          /* Put card strip in the middle row */
+          .slots-wrap {
+            width: 100%;
+            order: 2;
+          }
+
+          .nav-btn {
+            width: 32px;
+            height: 32px;
+          }
+
+          /* Allow card to take full width while still scrollable */
+          .slot-card {
+            min-width: 260px;
+            max-width: 100%;
+          }
+
+          /* Title / company / dates on separate lines for readability */
+          .detail-head .role {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+          }
+
+          .detail-head .dates {
+            margin-left: 0;
+          }
         }
       `}</style>
     </div>
