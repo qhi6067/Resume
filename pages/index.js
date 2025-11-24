@@ -249,7 +249,7 @@ export default function Page() {
         {/* ============== FOOTER ============== */}
         <footer className="footer reveal" data-reveal>
           <span>
-            © {new Date().getFullYear()} {CONTACT.name}. All rights reserved.
+            © {new Date().getFullYear()} {CONTACT.name}.
           </span>
         </footer>
       </main>
