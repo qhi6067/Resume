@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 /**
  * WelcomeOverlay
@@ -8,7 +8,8 @@ import { useState, useEffect } from "react";
  * and fades out once complete.
  */
 export function WelcomeOverlay({ onComplete }) {
-  const fullMessage = "Jaime Perez. Tech. Healthcare. Strategy.";
+  // Define message with \n for line breaks
+  const fullMessage = "Jaime Perez.\nTech. Healthcare. Strategy.";
 
   const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,12 +47,22 @@ export function WelcomeOverlay({ onComplete }) {
     }
   }, [isFading, onComplete]);
 
+  // Render text with line breaks as actual <br/> elements
+  const renderTextWithBreaks = (text) => {
+    return text.split('\n').map((line, index, array) => (
+      <span key={index}>
+        {line}
+        {index < array.length - 1 && <br />}
+      </span>
+    ));
+  };
+
   return (
     <div className={`welcome-overlay ${isFading ? "fade-out" : ""}`}>
       <div className="welcome-content">
         <div className="welcome-text-container">
           <h1 className="welcome-text">
-            {displayedText}
+            {renderTextWithBreaks(displayedText)}
             <span className={`cursor ${isComplete ? "hidden" : ""}`}>|</span>
           </h1>
         </div>
