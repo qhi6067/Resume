@@ -6,31 +6,76 @@ body {
 }
 
 html {
-  scroll-behavior: smooth; /* Smooth scrolling for in-page jumps */
+  scroll-behavior: smooth;
+  /* Smooth scrolling for in-page jumps */
 }
 
 body {
   margin: 0;
-  background: radial-gradient(
-    1200px 800px at 10% -20%,
-    #0d1a24,
-    #090f14 60%,
-    #070b0e
-  );
+  background: radial-gradient(ellipse 120% 80% at 50% -20%,
+      #0d2847 0%,
+      #0a1628 30%,
+      #050a12 70%,
+      #020408 100%);
   color: #e6eef7;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI,
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI,
     Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Animated background gradient */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: ambient-shift 20s ease-in-out infinite alternate;
+}
+
+@keyframes ambient-shift {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 a {
-  color: inherit; /* Links inherit text color by default */
+  color: inherit;
+  /* Links inherit text color by default */
+}
+
+/* Site blur effect during welcome animation */
+.site-blur {
+  filter: blur(8px);
+  opacity: 0.3;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+
+.site:not(.site-blur) {
+  filter: blur(0);
+  opacity: 1;
+  transition: filter 1s ease, opacity 1s ease;
 }
 
 /* ===== Layout & page structure ===== */
 
 .site {
-  max-width: 1100px;          /* Centered fixed width layout */
+  max-width: 1100px;
+  /* Centered fixed width layout */
   margin: 0 auto;
   padding: 32px 20px 64px;
 }
@@ -53,32 +98,38 @@ a {
   font-size: 42px;
   line-height: 1.08;
   letter-spacing: 0.2px;
-  background: linear-gradient(
-    90deg,
-    #cfeaff,
-    #8dd0ff,
-    #e6eef7
-  );
-  background-size: 200% 100%;
+  background: linear-gradient(135deg,
+      #ffffff 0%,
+      #8dd0ff 25%,
+      #51e2f5 50%,
+      #8dd0ff 75%,
+      #ffffff 100%);
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: shimmer 8s linear infinite;
+  animation: shimmer 6s ease infinite;
+  text-shadow: 0 0 40px rgba(81, 226, 245, 0.2);
 }
 
 /* Gradient shimmer animation for name */
 @keyframes shimmer {
-  0% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
-  100% {
-    background-position: 200% 50%;
+
+  50% {
+    background-position: 100% 50%;
   }
 }
 
 .subtitle {
   margin: 0;
-  opacity: 0.8;
+  opacity: 0.85;
+  font-size: 16px;
+  color: #94c8e8;
 }
 
 /* ===== Top navigation (section pills) ===== */
@@ -87,27 +138,46 @@ a {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  opacity: 0.95;
 }
 
-/* Nav items are buttons styled like small pills */
+/* Nav items are buttons styled like small pills with glassmorphism */
 .nav button {
   color: #bfe6ff;
   text-decoration: none;
-  border: 1px solid #1a2a38;
-  background: #0f1c27;
-  padding: 6px 10px;
+  border: 1px solid rgba(34, 65, 88, 0.6);
+  background: rgba(15, 28, 39, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 16px;
   border-radius: 999px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 200ms ease, border-color 200ms ease,
-    transform 150ms ease;
+  transition: all 300ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(81, 226, 245, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 300ms ease;
 }
 
 .nav button:hover {
-  background: #122435;
-  border-color: #224158;
-  transform: translateY(-1px);
+  background: rgba(18, 36, 53, 0.9);
+  border-color: rgba(81, 226, 245, 0.4);
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 20px rgba(81, 226, 245, 0.15),
+    0 0 30px rgba(81, 226, 245, 0.1);
+}
+
+.nav button:hover::before {
+  opacity: 1;
 }
 
 /* ===== Contact strip under header ===== */
@@ -125,14 +195,17 @@ a {
   align-items: center;
   padding-left: 0;
   margin: 0;
-  list-style: none; /* we'll draw our own bullets */
+  list-style: none;
+  /* we'll draw our own bullets */
 }
 
 /* Each item: keep bullet + text together */
 .contact-list li {
   position: relative;
-  padding-left: 10px;      /* room for the bullet */
-  white-space: nowrap;     /* keeps bullet + first word together on desktop */
+  padding-left: 10px;
+  /* room for the bullet */
+  white-space: nowrap;
+  /* keeps bullet + first word together on desktop */
 }
 
 /* Bullet dot */
@@ -178,10 +251,8 @@ a {
 .grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(280px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fill,
+      minmax(280px, 1fr));
 }
 
 /* Thin separator line between top and bottom rows of project cards */
@@ -193,13 +264,57 @@ a {
   opacity: 0.4;
 }
 
-/* Generic card container used for header, education, skills, etc. */
+/* Generic card container with glassmorphism effect */
 .card {
-  background: #101820;
-  border: 1px solid #14202a;
-  border-radius: 14px;
-  padding: 18px 18px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+  background: rgba(16, 24, 32, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(34, 65, 88, 0.4);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  position: relative;
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Subtle gradient border effect */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  padding: 1px;
+  background: linear-gradient(135deg,
+      rgba(81, 226, 245, 0.15) 0%,
+      transparent 30%,
+      transparent 70%,
+      rgba(139, 92, 246, 0.1) 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.25),
+    0 0 40px rgba(81, 226, 245, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  border-color: rgba(81, 226, 245, 0.3);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 /* ===== Headings ===== */
@@ -225,7 +340,8 @@ a {
 /* ===== Bullet lists (experience, education, leadership) ===== */
 
 .bullets {
-  margin: 8px 0 0 24px; /* Indent bullets like a resume tab */
+  margin: 8px 0 0 24px;
+  /* Indent bullets like a resume tab */
   padding-left: 4px;
 }
 
@@ -239,20 +355,30 @@ a {
 .badge-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Spacing between badges so text never glues together */
-  margin: 6px 0 8px;
+  gap: 8px;
+  margin: 8px 0 10px;
 }
 
-/* Pill-style badge */
+/* Pill-style badge with subtle glow */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
-  background: #0e2433;
-  border: 1px solid #183449;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, rgba(14, 36, 51, 0.8) 0%, rgba(24, 52, 73, 0.6) 100%);
+  border: 1px solid rgba(81, 226, 245, 0.2);
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
   white-space: nowrap;
+  color: #8dd0ff;
+  transition: all 300ms ease;
+}
+
+.badge:hover {
+  background: linear-gradient(135deg, rgba(24, 52, 73, 0.9) 0%, rgba(34, 65, 88, 0.7) 100%);
+  border-color: rgba(81, 226, 245, 0.4);
+  box-shadow: 0 0 12px rgba(81, 226, 245, 0.15);
+  transform: translateY(-1px);
 }
 
 /* ===== Footer ===== */
@@ -281,6 +407,7 @@ a {
 
 /* Accessibility: disable motion for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
+
   .reveal,
   [data-reveal],
   .reveal.in,
@@ -318,10 +445,14 @@ a {
 /* Individual project tags: mild bold + slight underline,
    but ONLY for project tags (does not touch Skills badges). */
 .project-tag {
-  font-weight: 600;                  /* “mild” bold */
-  text-decoration: underline;        /* slight underline */
-  text-decoration-thickness: 1px;    /* thin line */
-  text-underline-offset: 2px;        /* small offset below text */
+  font-weight: 600;
+  /* “mild” bold */
+  text-decoration: underline;
+  /* slight underline */
+  text-decoration-thickness: 1px;
+  /* thin line */
+  text-underline-offset: 2px;
+  /* small offset below text */
 }
 
 /* Project tags: mild bold + underline, but NOT pill-shaped */
@@ -338,6 +469,7 @@ a {
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
+
 /* For PDF Download */
 .pdf-btn {
   position: absolute;
@@ -357,87 +489,89 @@ a {
 .pdf-btn:hover {
   background: #132c40;
 }
+
 /* Mobile */
 /* ================================
    📱 MOBILE RESPONSIVE ADJUSTMENTS
    ================================ */
-   @media (max-width: 768px) {
-    /* Main container padding tightened */
-    .site {
-      padding: 20px 14px 40px;
-    }
-  
-    /* Name + subtitle shrink + center */
-    .name {
-      font-size: 30px;
-      text-align: center;
-    }
-  
-    .subtitle {
-      text-align: center;
-      font-size: 14px;
-    }
-  
-    /* Nav pills center & wrap nicer */
-    .nav {
-      justify-content: center;
-      row-gap: 8px;
-    }
-  
-    .nav button {
-      font-size: 12px;
-      padding: 4px 8px;
-    }
-  
-    /* Contact info stacks vertically, text stays next to bullet */
-    .contact-list {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      font-size: 13px;
-    }
-  
-    .contact-list li {
-      white-space: normal; /* allow wrapping, bullet sticks with line */
-    }
-  
-    /* Section spacing tightened */
-    .section {
-      margin-top: 24px;
-    }
-  
-    /* Projects grid becomes 1-column on mobile */
-    .grid {
-      grid-template-columns: 1fr !important;
-    }
-  
-    .card {
-      padding: 14px 14px;
-    }
-  
-    /* Reduce long text width for readability */
-    .project-desc,
-    .bullets li {
-      font-size: 14px;
-      line-height: 1.55;
-    }
-  
-    /* Footer text smaller */
-    .footer {
-      font-size: 12px;
-    }
-  
-    /* PDF button moves inward */
-    .pdf-btn {
-      top: 10px;
-      right: 10px;
-      padding: 5px 10px;
-      font-size: 11px;
-    }
+@media (max-width: 768px) {
 
-    /* Hide the key arrow on mob */
-    .exp-nav-btn{
-      display: none;
-    }
+  /* Main container padding tightened */
+  .site {
+    padding: 20px 14px 40px;
   }
-  
+
+  /* Name + subtitle shrink + center */
+  .name {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  /* Nav pills center & wrap nicer */
+  .nav {
+    justify-content: center;
+    row-gap: 8px;
+  }
+
+  .nav button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  /* Contact info stacks vertically, text stays next to bullet */
+  .contact-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 13px;
+  }
+
+  .contact-list li {
+    white-space: normal;
+    /* allow wrapping, bullet sticks with line */
+  }
+
+  /* Section spacing tightened */
+  .section {
+    margin-top: 24px;
+  }
+
+  /* Projects grid becomes 1-column on mobile */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card {
+    padding: 14px 14px;
+  }
+
+  /* Reduce long text width for readability */
+  .project-desc,
+  .bullets li {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Footer text smaller */
+  .footer {
+    font-size: 12px;
+  }
+
+  /* PDF button moves inward */
+  .pdf-btn {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  /* Hide the key arrow on mob */
+  .exp-nav-btn {
+    display: none;
+  }
+}

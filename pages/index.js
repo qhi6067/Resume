@@ -1,6 +1,6 @@
 "use client"; // This page uses client-side hooks like useRevealOnScroll.
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 // Controller for scroll animations (IntersectionObserver logic).
 import { useRevealOnScroll } from "../controller/useRevealOnScroll";
@@ -20,6 +20,7 @@ import { SectionTitle } from "../views/SectionTitle";
 import { BadgeRow } from "../views/BadgeRow";
 import { ExperienceSlots } from "../views/ExperienceSlots";
 import { ProjectCard } from "../views/ProjectCard";
+import { WelcomeOverlay } from "../views/WelcomeOverlay";
 
 /**
  * Main page component:
@@ -27,6 +28,9 @@ import { ProjectCard } from "../views/ProjectCard";
  * - Renders the full resume/portfolio layout.
  */
 export default function Page() {
+  // State to control welcome overlay visibility
+  const [showWelcome, setShowWelcome] = useState(true);
+
   // Start scroll-reveal behavior once elements enter the viewport.
   useRevealOnScroll();
 
@@ -34,23 +38,23 @@ export default function Page() {
   // const handleDownloadPDF = async () => {
   //   const jsPDF = (await import("jspdf")).default;
   //   const html2canvas = (await import("html2canvas")).default;
-  
+
   //   const page = document.querySelector("main.site");
-  
+
   //   // render screen to canvas
   //   const canvas = await html2canvas(page, { scale: 2 });
   //   const imgData = canvas.toDataURL("image/png");
-  
+
   //   const pdf = new jsPDF("p", "mm", "a4");
-  
+
   //   // scale to fit A4 width
   //   const pdfWidth = pdf.internal.pageSize.getWidth();
   //   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
+
   //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
   //   pdf.save("JaimePerez_Resume.pdf");
   // };
-  
+
 
   /**
    * Safely copy email to clipboard when user clicks "Copy email" button.
@@ -87,7 +91,12 @@ export default function Page() {
 
   return (
     <>
-      <main className="site">
+      {/* Welcome overlay with typing animation */}
+      {showWelcome && (
+        <WelcomeOverlay onComplete={() => setShowWelcome(false)} />
+      )}
+
+      <main className={`site ${showWelcome ? "site-blur" : ""}`}>
         {/* ================= HEADER ================= */}
         <header className="header card reveal" data-reveal>
           {/* Name + subtitle */}
