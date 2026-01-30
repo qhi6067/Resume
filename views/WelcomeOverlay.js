@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
  * and fades out once complete.
  */
 export function WelcomeOverlay({ onComplete }) {
-  const fullMessage = "I’m Jaime Perez, a multidisciplinary professional who operates at the intersection of tech, healthcare, and strategy";
+  const fullMessage = "Jaime Perez, a multidisciplinary professional at the intersection of tech, healthcare, and strategy.";
 
   const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
