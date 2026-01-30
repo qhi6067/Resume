@@ -289,13 +289,28 @@ export function ExperienceSlots({ items }) {
 
         /* Left/right arrow buttons */
         .nav-btn {
-          width: 40px;
-          height: 40px;
+          width: 48px;
+          height: 48px;
           border-radius: 999px;
-          border: 1px solid #203544;
-          background: #0f1b24;
-          color: #bfe6ff;
+          border: 1px solid rgba(81, 226, 245, 0.3);
+          background: rgba(15, 27, 36, 0.8);
+          backdrop-filter: blur(8px);
+          color: #8dd0ff;
           cursor: pointer;
+          font-size: 24px;
+          font-weight: 300;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 300ms ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+          background: rgba(24, 52, 73, 0.9);
+          border-color: rgba(81, 226, 245, 0.5);
+          color: #51e2f5;
+          box-shadow: 0 0 20px rgba(81, 226, 245, 0.15);
+          transform: scale(1.05);
         }
 
         .nav-btn:disabled {

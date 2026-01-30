@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
  * and fades out once complete.
  */
 export function WelcomeOverlay({ onComplete }) {
-  const fullMessage = "Jaime Perez, a multidisciplinary professional at the intersection of tech, healthcare, and strategy.";
+  const fullMessage = "Jaime Perez. Tech. Healthcare. Strategy.";
 
   const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +21,7 @@ export function WelcomeOverlay({ onComplete }) {
       const timeout = setTimeout(() => {
         setDisplayedText(fullMessage.slice(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
-      }, 35); // 50ms per character
+      }, 50); // 50ms per character
 
       return () => clearTimeout(timeout);
     } else {
