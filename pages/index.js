@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 
 // Controller for scroll animations (IntersectionObserver logic).
 import { useRevealOnScroll } from "../controller/useRevealOnScroll";
+import { useFunReveal } from "../controller/useParallaxScroll";
 
 // Model data (your resume content).
 import {
@@ -33,6 +34,9 @@ export default function Page() {
 
   // Start scroll-reveal behavior once elements enter the viewport.
   useRevealOnScroll();
+
+  // Add fun staggered animations
+  useFunReveal();
 
   // //download pdf version of file Will add later
   // const handleDownloadPDF = async () => {
