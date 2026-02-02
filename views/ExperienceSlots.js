@@ -447,6 +447,37 @@ export function ExperienceSlots({ items }) {
         .dot.on {
           background: #8dd0ff;
         }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+          .slots-bar {
+            grid-template-columns: auto 1fr auto;
+            gap: 4px;
+          }
+
+          .nav-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+          }
+
+          .slot-card {
+            min-width: 200px;
+            max-width: 260px;
+          }
+
+          .slot-inner {
+            padding: 10px;
+          }
+
+          .slot-title {
+            font-size: 14px;
+          }
+
+          .slot-dates {
+            font-size: 11px;
+          }
+        }
       `}</style>
     </div>
   );
