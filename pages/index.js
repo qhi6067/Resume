@@ -14,6 +14,8 @@ import {
   EDUCATION as EducationData,
   SKILLS as SkillsData,
   LEADERSHIP as Leadership,
+  LANGUAGES as LanguagesData,
+  TOOLS as ToolsData,
 } from "../models/resumeData";
 
 // View components (pure presentation).
@@ -31,6 +33,8 @@ import { WelcomeOverlay } from "../views/WelcomeOverlay";
 export default function Page() {
   // State to control welcome overlay visibility
   const [showWelcome, setShowWelcome] = useState(true);
+  // State to control projects expand/collapse
+  const [showAllProjects, setShowAllProjects] = useState(false);
 
   // Start scroll-reveal behavior once elements enter the viewport.
   useRevealOnScroll();
@@ -144,6 +148,13 @@ export default function Page() {
             <p className="subtitle">
               Solutions Engineer • Software Engineer • Medical • B2B Sales
             </p>
+
+            {/* Languages badges inline */}
+            <div className="languages-inline">
+              {LanguagesData.map((lang) => (
+                <span key={lang} className="lang-badge">{lang}</span>
+              ))}
+            </div>
           </div>
 
           {/* Top navigation: buttons that scroll to each section */}
@@ -159,6 +170,9 @@ export default function Page() {
             </button>
             <button type="button" onClick={() => scrollToSection("skills")}>
               Skills
+            </button>
+            <button type="button" onClick={() => scrollToSection("tools")}>
+              Tools
             </button>
             <button type="button" onClick={() => scrollToSection("leadership")}>
               Leadership
@@ -208,16 +222,29 @@ export default function Page() {
           <SectionTitle>Projects</SectionTitle>
 
           <div className="grid">
-            {ProjectData.map((project_item, index) => (
+            {(showAllProjects ? ProjectData : ProjectData.slice(0, 6)).map((project_item, index) => (
               <Fragment key={project_item.name}>
-                {/* Individual project card */}
-                <ProjectCard {...project_item} />
+                {/* Individual project card - add 'in' class for items beyond first 6 when expanded */}
+                <div className={index >= 6 ? "reveal-instant" : ""}>
+                  <ProjectCard {...project_item} />
+                </div>
 
                 {/* Visual separator between top and bottom grid rows */}
                 {index === 2 && <div className="grid-separator" />}
               </Fragment>
             ))}
           </div>
+
+          {/* Expand/Collapse button if more than 6 projects */}
+          {ProjectData.length > 6 && (
+            <button
+              type="button"
+              className="expand-btn"
+              onClick={() => setShowAllProjects(!showAllProjects)}
+            >
+              {showAllProjects ? "Show Less" : `Show All ${ProjectData.length} Projects`}
+            </button>
+          )}
         </section>
 
         {/* ============== EDUCATION ============== */}
@@ -251,20 +278,32 @@ export default function Page() {
           <SectionTitle>Skills</SectionTitle>
 
           <div className="card" data-reveal>
-            <h4 className="h4">Programming Languages</h4>
+            <h4 className="h4">Programming</h4>
             <BadgeRow items={SkillsData.programming} />
 
-            <h4 className="h4">Technical Skills</h4>
-            <BadgeRow items={SkillsData.technical} />
+            <h4 className="h4">Infrastructure & Systems</h4>
+            <BadgeRow items={SkillsData.infrastructure} />
 
-            <h4 className="h4">Medical Knowledge</h4>
+            <h4 className="h4">Software Development</h4>
+            <BadgeRow items={SkillsData.software} />
+
+            <h4 className="h4">Healthcare & Medical</h4>
             <BadgeRow items={SkillsData.medical} />
 
             <h4 className="h4">Soft Skills</h4>
             <BadgeRow items={SkillsData.soft} />
 
-            <h4 className="h4">Sales Skills</h4>
+            <h4 className="h4">Sales & Client Relations</h4>
             <BadgeRow items={SkillsData.sales} />
+          </div>
+        </section>
+
+        {/* ============== TOOLS ============== */}
+        <section id="tools" className="section reveal" data-reveal>
+          <SectionTitle>Tools & Platforms</SectionTitle>
+
+          <div className="card" data-reveal>
+            <BadgeRow items={ToolsData} />
           </div>
         </section>
 

@@ -132,6 +132,26 @@ a {
   color: #94c8e8;
 }
 
+/* Inline languages in header */
+.languages-inline {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.lang-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8dd0ff;
+  background: rgba(81, 226, 245, 0.1);
+  border: 1px solid rgba(81, 226, 245, 0.25);
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+}
+
 /* ===== Top navigation (section pills) ===== */
 
 .nav {
@@ -385,6 +405,32 @@ a {
   transform: translateY(-1px);
 }
 
+/* ===== Expand Button (Projects) ===== */
+
+.expand-btn {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8dd0ff;
+  background: rgba(15, 28, 39, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(81, 226, 245, 0.3);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 300ms ease;
+}
+
+.expand-btn:hover {
+  background: rgba(24, 52, 73, 0.9);
+  border-color: rgba(81, 226, 245, 0.5);
+  color: #51e2f5;
+  box-shadow: 0 0 20px rgba(81, 226, 245, 0.15);
+  transform: translateY(-2px);
+}
+
 /* ===== Footer ===== */
 
 .footer {
@@ -413,6 +459,26 @@ a {
 [data-reveal].in {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Instant reveal for dynamically added elements (e.g., expanded projects) */
+.reveal-instant [data-reveal],
+.reveal-instant .card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: fade-in 400ms ease forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Staggered card animations */
