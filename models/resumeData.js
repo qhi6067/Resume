@@ -41,16 +41,14 @@ export const EXPERIENCE = [
 
     // Bullet points displayed in the experience detail view
     bullets: [
-      "Nationally recognized engineer for delivering high-impact healthcare technology solutions across the U.S.",
-      "Deliver end-to-end system, network, and security engineering solutions for multi-site hospital deployments, including Cisco networking and RF/RTLS infrastructure.",
-      "Serve as assisting project manager by coordinating timelines, site visits, and milestones with hospital leadership to keep projects on schedule.",
-      "Design and implement specialized patient safety and environmental monitoring systems, including Hugs & Kisses infant security technology in labor and delivery units.",
+      "Deliver end-to-end system, network, and security engineering solutions for multi-site hospital deployments, including Cisco networking, RF/RTLS systems and server infrastructure.",
+      "Design and implement patient safety and environmental monitoring systems, including Hugs & Kisses infant security technology in labor and delivery units.",
       "Act as the primary owner for all Latin American projects, leveraging bilingual Spanish–English skills to lead implementations in Puerto Rico, Costa Rica, and Mexico.",
-      "Awarded and recognized for successfully completing complex projects in Puerto Rico, Costa Rica, and Mexico while maintaining excellent customer satisfaction.",
-      "Apply expertise in RF systems, Cisco networking, and server infrastructure to design scalable healthcare technology solutions.",
-      "Collaborate directly with hospital IT teams and clinical staff to develop tailored, scalable solutions and provide hands-on training.",
-      "Handle project budgeting and resource planning, effectively performing both engineering and project management responsibilities."
+      "Collaborate with hospital IT teams and clinical staff to develop scalable solutions and deliver hands-on training.",
+      "Manage project budgeting, vendor coordination, and resource planning as assisting project manager for multi-site hospital deployments.",
+      "Awarded and recognized for successfully completing complex projects in Puerto Rico, Costa Rica, and Mexico while maintaining excellent customer satisfaction."
     ],
+
   },
 
   {
@@ -103,7 +101,7 @@ export const EXPERIENCE = [
     id: "pharmtech",
     title: "Pharmacy Technician",
     company: "UMC Lubbock, Las Palmas Medical Center",
-    dates: "2019 - 2025",
+    dates: "2019 - Present",
 
     badges: [" Compounding", " Nursing Communication", " Patient Care"],
 

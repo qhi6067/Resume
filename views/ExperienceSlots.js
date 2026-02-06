@@ -252,7 +252,15 @@ export function ExperienceSlots({ items }) {
             onClick={() => setIsExpanded((v) => !v)}
             aria-label={isExpanded ? "Show fewer details" : "Show more details"}
           >
-            {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+            {isExpanded ? (
+              <>
+                <FaChevronUp /> Show Less
+              </>
+            ) : (
+              <>
+                <FaChevronDown /> Show More
+              </>
+            )}
           </button>
         )}
 
@@ -414,16 +422,29 @@ export function ExperienceSlots({ items }) {
 
         /* Small expand/collapse button under bullets */
         .expand-btn {
-          margin-top: 6px;
-          width: 24px;
-          height: 24px;
+          margin-top: 10px;
+          padding: 8px 20px;
           border-radius: 999px;
-          border: none;
-          background-color: #222;
-          color: #51e2f5;
-          display: flex;
+          border: 1px solid rgba(81, 226, 245, 0.3);
+          background: rgba(15, 28, 39, 0.8);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          color: #8dd0ff;
+          font-size: 13px;
+          font-weight: 500;
+          display: inline-flex;
           align-items: center;
-          justify-content: center;
+          gap: 6px;
+          white-space: nowrap;
+          cursor: pointer;
+          transition: all 300ms ease;
+        }
+
+        .expand-btn:hover {
+          background: rgba(24, 52, 73, 0.9);
+          border-color: rgba(81, 226, 245, 0.5);
+          color: #51e2f5;
+          box-shadow: 0 0 20px rgba(81, 226, 245, 0.15);
         }
 
         /* Progress dots row */
