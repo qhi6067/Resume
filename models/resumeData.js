@@ -198,6 +198,17 @@ export const PROJECTS = [
       " PyInstaller.",
     ],
   },
+  {
+    name: "Aeroscout Log Filtering App",
+    desc:
+      "Desktop application for parsing and analyzing Aeroscout MobileView logs with time-window grouping. Features drag-and-drop processing and automated Excel reporting to accelerate system troubleshooting and diagnostics.",
+    tags: [
+      " Python,",
+      " Tkinter,",
+      " openpyxl,",
+      " PyInstaller.",
+    ],
+  },
 
 ];
 
