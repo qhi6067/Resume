@@ -168,13 +168,15 @@ export const PROJECTS = [
   {
     name: "Project Management System",
     desc:
-      "System for Securitas Healthcare to manage projects and tasks in a sequential and automated manner.",
+      "Automated project management platform orchestrating sequential task workflows. Leverages Salesforce API for real-time CRM synchronization and Microsoft Graph API for seamless Office 365 connectivity. Features AI-powered email generation to streamline client communication and automate updates.",
     tags: [
       " Next.js,",
-      " CSS,",
-      " SQL,",
+      " Salesforce API,",
+      " MS Graph API,",
+      " AI (OpenAI),",
       " React,",
-      " Docker.",
+      " Docker,",
+      " SQL.",
     ],
   },
   {

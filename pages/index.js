@@ -109,7 +109,7 @@ export default function Page() {
         <header className="header card reveal" data-reveal>
           {/* PDF Download/View Button */}
           <a
-            href="/Jaime_Perez_Resume.pdf"
+            href="/Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="pdf-btn"

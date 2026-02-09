@@ -781,3 +781,27 @@ a {
     display: none;
   }
 }
+
+/* ===== Interactive Project Cards ===== */
+
+.project-card-interactive {
+  cursor: pointer;
+}
+
+.project-card-interactive:hover .project-desc {
+  color: #fff;
+}
+
+.read-more-hint {
+  color: #51e2f5;
+  font-weight: 500;
+  margin-left: 0px;
+  font-size: 0.9em;
+  opacity: 0.8;
+  transition: opacity 200ms ease;
+}
+
+.project-card-interactive:hover .read-more-hint {
+  opacity: 1;
+  text-decoration: underline;
+}
