@@ -222,7 +222,6 @@ export const EDUCATION = [
   {
     school: "University of Texas at El Paso",
     degree: "Bachelor of Science in Biochemistry and Computer Science",
-    dates: "2019 - 2024",
 
     // Achievements/honors under the degree
     bullets: [

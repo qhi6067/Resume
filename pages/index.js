@@ -259,8 +259,7 @@ export default function Page() {
             >
               {/* School + degree + dates on one line */}
               <h3 className="h3">
-                {education_entry.school} — {education_entry.degree} (
-                {education_entry.dates})
+                {education_entry.school} — {education_entry.degree} {/* removed dates */}
               </h3>
 
               {/* Bullet list of honors/achievements */}
