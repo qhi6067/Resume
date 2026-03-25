@@ -168,35 +168,50 @@ export const PROJECTS = [
   {
     name: "Project Management System",
     desc:
-      "Automated project management platform orchestrating sequential task workflows. Leverages Salesforce API for real-time CRM synchronization and Microsoft Graph API for seamless Office 365 connectivity. Features AI-powered email generation to streamline client communication and automate updates.",
+      "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
     tags: [
       " Next.js,",
-      " Salesforce API,",
-      " MS Graph API,",
-      " AI (OpenAI),",
       " React,",
-      " Docker,",
+      " Supabase,",
+      " Prisma ORM,",
+      " AI (OpenAI),",
+      " TypeScript,",
       " SQL.",
     ],
   },
   {
-    name: "Engine Map Remover Application",
+    name: "Project Milestone Tracker",
     desc:
-      "Windows executable to remove hospital maps from Securitas’ backend engine to reduce Location Optimization file size.",
+      "Mobile-first project tracking web app built with Vite and Supabase. Features role-based access (admin/user), real-time workflow step tracking across 5 milestone phases, progress circle visualization, admin user creation portal, project archiving, and full Supabase-backed persistence. Deployed to Vercel.",
+    tags: [
+      " Vite,",
+      " Supabase,",
+      " JavaScript,",
+      " Role-Based Auth,",
+      " Vercel.",
+    ],
+  },
+  {
+    name: "Engine Map Filter Application",
+    desc:
+      "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
     tags: [
       " Python,",
-      " Windows,",
-      " PyInstaller.",
+      " Tkinter,",
+      " PyInstaller,",
+      " Fieldwire,",
+      " Windows.",
     ],
   },
   {
     name: "Dynamic System Architecture Builder",
     desc:
-      "Tkinter GUI application for building and visualizing network architecture diagrams using Graphviz, with portable distribution.",
+      "Tkinter GUI that generates professional RTLS/HUGS network architecture diagrams as PNG and PDF. Configurable for Cisco vs. Non-Cisco, HA vs. Singular environments, and Unidirectional vs. Bidirectional tags. Includes an advanced IP/hostname panel, auto port highlighting, bundled Graphviz for zero-dependency deployment, and a comprehensive ports reference PDF (KB 16076) appended to each export. Distributed as a standalone EXE.",
     tags: [
       " Python,",
       " Tkinter,",
       " Graphviz,",
+      " ReportLab,",
       " PyInstaller.",
     ],
   },
@@ -222,6 +237,7 @@ export const EDUCATION = [
   {
     school: "University of Texas at El Paso",
     degree: "Bachelor of Science in Biochemistry and Computer Science",
+    dates: "2019 - 2024",
 
     // Achievements/honors under the degree
     bullets: [
