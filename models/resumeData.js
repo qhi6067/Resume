@@ -192,6 +192,32 @@ export const PROJECTS = [
     ],
   },
   {
+    name: "LPMC Scheduler",
+    desc:
+      "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
+    tags: [
+      " Vite,",
+      " JavaScript,",
+      " Node.js,",
+      " Postgres,",
+      " Vercel Blob,",
+      " Excel Processing.",
+    ],
+  },
+  {
+    name: "Environmental Monitoring Analysis Tool",
+    desc:
+      "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
+    tags: [
+      " Python,",
+      " Flask,",
+      " openpyxl,",
+      " xlrd,",
+      " Rule Engine,",
+      " Excel Automation.",
+    ],
+  },
+  {
     name: "Engine Map Filter Application",
     desc:
       "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
@@ -206,10 +232,13 @@ export const PROJECTS = [
   {
     name: "Dynamic System Architecture Builder",
     desc:
-      "Tkinter GUI that generates professional RTLS/HUGS network architecture diagrams as PNG and PDF. Configurable for Cisco vs. Non-Cisco, HA vs. Singular environments, and Unidirectional vs. Bidirectional tags. Includes an advanced IP/hostname panel, auto port highlighting, bundled Graphviz for zero-dependency deployment, and a comprehensive ports reference PDF (KB 16076) appended to each export. Distributed as a standalone EXE.",
+      "Desktop and online architecture-design platform for RTLS/HUGS environments. Expanded the original Tkinter + Graphviz builder with ELK auto-layout, a Next.js web implementation, shared configuration mapping, layout and PDF export APIs, URL-driven config loading, and professional SVG/PNG/PDF output generation for Cisco and Non-Cisco HA or singular deployments.",
     tags: [
       " Python,",
       " Tkinter,",
+      " Next.js,",
+      " TypeScript,",
+      " ELK.js,",
       " Graphviz,",
       " ReportLab,",
       " PyInstaller.",
@@ -224,6 +253,32 @@ export const PROJECTS = [
       " Tkinter,",
       " openpyxl,",
       " PyInstaller.",
+    ],
+  },
+  {
+    name: "Jocelynne's Boots Invoice System",
+    desc:
+      "Next.js invoicing and operations dashboard for a custom boot business with login flow, client and product management, invoice creation, printable invoice detail pages, status updates, notifications, and Supabase-backed persistence. Structured as a modern admin workspace with reusable UI components and dashboard views for clients, products, invoices, and settings.",
+    tags: [
+      " Next.js,",
+      " React,",
+      " TypeScript,",
+      " Supabase,",
+      " Tailwind CSS,",
+      " Invoice Workflow.",
+    ],
+  },
+  {
+    name: "Sias' Salt E-Commerce Experience",
+    desc:
+      "Premium product landing page for an artisan salt brand featuring custom visual design, responsive navigation, polished motion, immersive hero treatment, Supabase integration, and Three.js-driven presentation touches to create a more elevated online shopping experience.",
+    tags: [
+      " HTML,",
+      " CSS,",
+      " JavaScript,",
+      " Supabase,",
+      " Three.js,",
+      " Responsive Design.",
     ],
   },
 
@@ -268,9 +323,11 @@ export const SKILLS = {
     "Python",
     "React",
     "JavaScript",
+    "TypeScript",
     "jQuery",
     "PHP",
     "SQL",
+    "Flask",
     "HTML/CSS",
     "API Integration",
   ],
@@ -280,6 +337,9 @@ export const SKILLS = {
     "RF/RTLS systems",
     "Server deployment",
     "Cloud architecture",
+    "Vercel deployment",
+    "Postgres / Supabase",
+    "Blob storage",
     "System commissioning",
     "Hardware/software troubleshooting",
   ],
@@ -289,6 +349,10 @@ export const SKILLS = {
     "Automation scripting",
     "Database design",
     "System integration",
+    "Excel data processing",
+    "Rule-engine design",
+    "Diagram generation & export pipelines",
+    "Responsive UI design",
   ],
 
   medical: [
@@ -345,5 +409,11 @@ export const TOOLS = [
   "Virtual Machines / Remote Desktop",
   "Cisco Networking Tools",
   "Network Diagnostics & Troubleshooting",
+  "Graphviz",
+  "ELK.js",
+  "ReportLab",
+  "openpyxl",
+  "Supabase",
+  "Vercel",
 ];
 
