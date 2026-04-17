@@ -1,6 +1,6 @@
 "use client"; // This page uses client-side hooks like useRevealOnScroll.
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 // Controller for scroll animations (IntersectionObserver logic).
 import { useRevealOnScroll } from "../controller/useRevealOnScroll";
@@ -35,12 +35,27 @@ export default function Page() {
   const [showWelcome, setShowWelcome] = useState(true);
   // State to control projects expand/collapse
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [isMobileProjects, setIsMobileProjects] = useState(false);
 
   // Start scroll-reveal behavior once elements enter the viewport.
   useRevealOnScroll();
 
   // Add fun staggered animations
   useFunReveal();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const syncProjectLayout = (event) => {
+      setIsMobileProjects(event.matches);
+    };
+
+    syncProjectLayout(mediaQuery);
+    mediaQuery.addEventListener("change", syncProjectLayout);
+
+    return () => mediaQuery.removeEventListener("change", syncProjectLayout);
+  }, []);
 
   // //download pdf version of file Will add later
   // const handleDownloadPDF = async () => {
@@ -96,6 +111,12 @@ export default function Page() {
       });
     }
   };
+
+  const initialProjectCount = isMobileProjects ? 3 : 6;
+  const visibleProjects = showAllProjects
+    ? ProjectData
+    : ProjectData.slice(0, initialProjectCount);
+  const remainingProjects = Math.max(ProjectData.length - initialProjectCount, 0);
 
   return (
     <>
@@ -222,27 +243,31 @@ export default function Page() {
           <SectionTitle>Projects</SectionTitle>
 
           <div className="grid">
-            {(showAllProjects ? ProjectData : ProjectData.slice(0, 6)).map((project_item, index) => (
+            {visibleProjects.map((project_item, index) => (
               <Fragment key={project_item.name}>
                 {/* Individual project card - add 'in' class for items beyond first 6 when expanded */}
-                <div className={index >= 6 ? "reveal-instant" : ""}>
-                  <ProjectCard {...project_item} />
+                <div className={index >= initialProjectCount ? "reveal-instant" : ""}>
+                  <ProjectCard {...project_item} compact={isMobileProjects} />
                 </div>
 
                 {/* Visual separator between top and bottom grid rows */}
-                {index === 2 && <div className="grid-separator" />}
+                {!isMobileProjects && index === 2 && <div className="grid-separator" />}
               </Fragment>
             ))}
           </div>
 
-          {/* Expand/Collapse button if more than 6 projects */}
-          {ProjectData.length > 6 && (
+          {/* Expand/Collapse button if more than the initial count */}
+          {ProjectData.length > initialProjectCount && (
             <button
               type="button"
               className="expand-btn"
               onClick={() => setShowAllProjects(!showAllProjects)}
             >
-              {showAllProjects ? "Show Less" : `Show All ${ProjectData.length} Projects`}
+              {showAllProjects
+                ? "Show Less"
+                : isMobileProjects
+                  ? `Show ${remainingProjects} More`
+                  : `Show All ${ProjectData.length} Projects`}
             </button>
           )}
         </section>

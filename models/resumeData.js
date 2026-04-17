@@ -25,7 +25,7 @@ export const CONTACT = {
 export const EXPERIENCE = [
   {
     id: "securitas",
-    title: "Solutions Engineer and Assisting Project Manager",
+    title: "Solutions Engineer / Project Manager / LATAM Clinical Educator / Developer",
     company: "Securitas Healthcare",
     dates: "October 2024 - Present",
 
@@ -41,12 +41,13 @@ export const EXPERIENCE = [
 
     // Bullet points displayed in the experience detail view
     bullets: [
-      "Deliver end-to-end system, network, and security engineering solutions for multi-site hospital deployments, including Cisco networking, RF/RTLS systems and server infrastructure.",
-      "Design and implement patient safety and environmental monitoring systems, including Hugs & Kisses infant security technology in labor and delivery units.",
-      "Act as the primary owner for all Latin American projects, leveraging bilingual Spanish–English skills to lead implementations in Puerto Rico, Costa Rica, and Mexico.",
-      "Collaborate with hospital IT teams and clinical staff to develop scalable solutions and deliver hands-on training.",
-      "Manage project budgeting, vendor coordination, and resource planning as assisting project manager for multi-site hospital deployments.",
-      "Awarded and recognized for successfully completing complex projects in Puerto Rico, Costa Rica, and Mexico while maintaining excellent customer satisfaction."
+      "Lead end-to-end solution design and deployment of hospital-wide RTLS, infant protection (Hugs & Kisses), and environmental monitoring systems across multi-site health systems, translating clinical workflow requirements into Cisco networking, RF infrastructure, and server architectures.",
+      "Serve as the primary technical point of contact for hospital IT, clinical leadership, and executive stakeholders throughout the pre-sales and implementation lifecycle, scoping requirements, running solution demos, and driving technical wins from discovery through go-live.",
+      "Own the full LATAM portfolio as the sole bilingual (Spanish/English) solutions engineer, leading implementations across Puerto Rico, Costa Rica, and Mexico and expanding delivery capacity in markets previously underserved due to language and regional coverage gaps.",
+      "Manage project lifecycle for multi-site hospital deployments as assisting project manager, overseeing budgeting, vendor coordination, resource planning, deadline tracking, and escalation management across cross-functional teams.",
+      "Partner with sales, product, and engineering teams to troubleshoot complex integration issues spanning databases, authentication, certificates, and wireless infrastructure, reducing escalations and accelerating time-to-value for hospital customers.",
+      "Design and deliver bilingual clinical education programs, workshops, remote trainings, and go-live support for nursing, IT, and executive stakeholders, ensuring sustained adoption of patient safety technology in labor and delivery and other high-acuity units.",
+      "Develop internal Python and AI-assisted tooling to automate deployment documentation, technical analysis, and reporting workflows, applying full-stack and machine learning experience to reduce manual overhead for the implementation team."
     ],
 
   },
@@ -143,29 +144,6 @@ export const PROJECTS = [
     ],
   },
   {
-    name: "Inventory Management System",
-    desc:
-      "Full-stack inventory app automating stock tracking and updates to optimize operations for various company use.",
-    tags: [
-      " JavaScript,",
-      " PHP,",
-      " SQL,",
-      " jQuery,",
-      " Full-stack.",
-    ],
-  },
-  {
-    name: "Particle Simulator",
-    desc:
-      "Python/Django + SQLite simulator; scraped periodic-table data and modeled particle interactions (mass/charge).",
-    tags: [
-      " Python,",
-      " Django,",
-      " SQLite,",
-      " Web Scraping.",
-    ],
-  },
-  {
     name: "Project Management System",
     desc:
       "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
@@ -177,56 +155,6 @@ export const PROJECTS = [
       " AI (OpenAI),",
       " TypeScript,",
       " SQL.",
-    ],
-  },
-  {
-    name: "Project Milestone Tracker",
-    desc:
-      "Mobile-first project tracking web app built with Vite and Supabase. Features role-based access (admin/user), real-time workflow step tracking across 5 milestone phases, progress circle visualization, admin user creation portal, project archiving, and full Supabase-backed persistence. Deployed to Vercel.",
-    tags: [
-      " Vite,",
-      " Supabase,",
-      " JavaScript,",
-      " Role-Based Auth,",
-      " Vercel.",
-    ],
-  },
-  {
-    name: "LPMC Scheduler",
-    desc:
-      "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
-    tags: [
-      " Vite,",
-      " JavaScript,",
-      " Node.js,",
-      " Postgres,",
-      " Vercel Blob,",
-      " Excel Processing.",
-    ],
-  },
-  {
-    name: "Environmental Monitoring Analysis Tool",
-    desc:
-      "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
-    tags: [
-      " Python,",
-      " Flask,",
-      " openpyxl,",
-      " xlrd,",
-      " Rule Engine,",
-      " Excel Automation.",
-    ],
-  },
-  {
-    name: "Engine Map Filter Application",
-    desc:
-      "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
-    tags: [
-      " Python,",
-      " Tkinter,",
-      " PyInstaller,",
-      " Fieldwire,",
-      " Windows.",
     ],
   },
   {
@@ -245,14 +173,29 @@ export const PROJECTS = [
     ],
   },
   {
-    name: "Aeroscout Log Filtering App",
+    name: "Environmental Monitoring Analysis Tool",
     desc:
-      "Desktop application for parsing and analyzing Aeroscout MobileView logs with time-window grouping. Features drag-and-drop processing and automated Excel reporting to accelerate system troubleshooting and diagnostics.",
+      "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
     tags: [
       " Python,",
-      " Tkinter,",
+      " Flask,",
       " openpyxl,",
-      " PyInstaller.",
+      " xlrd,",
+      " Rule Engine,",
+      " Excel Automation.",
+    ],
+  },
+  {
+    name: "LPMC Scheduler",
+    desc:
+      "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
+    tags: [
+      " Vite,",
+      " JavaScript,",
+      " Node.js,",
+      " Postgres,",
+      " Vercel Blob,",
+      " Excel Processing.",
     ],
   },
   {
@@ -269,7 +212,65 @@ export const PROJECTS = [
     ],
   },
   {
-    name: "Sias' Salt E-Commerce Experience",
+    name: "Project Milestone Tracker",
+    desc:
+      "Mobile-first project tracking web app built with Vite and Supabase. Features role-based access (admin/user), real-time workflow step tracking across 5 milestone phases, progress circle visualization, admin user creation portal, project archiving, and full Supabase-backed persistence. Deployed to Vercel.",
+    tags: [
+      " Vite,",
+      " Supabase,",
+      " JavaScript,",
+      " Role-Based Auth,",
+      " Vercel.",
+    ],
+  },
+  {
+    name: "Inventory Management System",
+    desc:
+      "Full-stack inventory app automating stock tracking and updates to optimize operations for various company use.",
+    tags: [
+      " JavaScript,",
+      " PHP,",
+      " SQL,",
+      " jQuery,",
+      " Full-stack.",
+    ],
+  },
+  {
+    name: "Engine Map Filter Application",
+    desc:
+      "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
+    tags: [
+      " Python,",
+      " Tkinter,",
+      " PyInstaller,",
+      " Fieldwire,",
+      " Windows.",
+    ],
+  },
+  {
+    name: "Aeroscout Log Filtering App",
+    desc:
+      "Desktop application for parsing and analyzing Aeroscout MobileView logs with time-window grouping. Features drag-and-drop processing and automated Excel reporting to accelerate system troubleshooting and diagnostics.",
+    tags: [
+      " Python,",
+      " Tkinter,",
+      " openpyxl,",
+      " PyInstaller.",
+    ],
+  },
+  {
+    name: "Particle Simulator",
+    desc:
+      "Python/Django + SQLite simulator; scraped periodic-table data and modeled particle interactions (mass/charge).",
+    tags: [
+      " Python,",
+      " Django,",
+      " SQLite,",
+      " Web Scraping.",
+    ],
+  },
+  {
+    name: "Sias' Salt E-Commerce",
     desc:
       "Premium product landing page for an artisan salt brand featuring custom visual design, responsive navigation, polished motion, immersive hero treatment, Supabase integration, and Three.js-driven presentation touches to create a more elevated online shopping experience.",
     tags: [
