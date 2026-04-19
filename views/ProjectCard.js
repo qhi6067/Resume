@@ -30,7 +30,6 @@ export function ProjectCard({ name, desc, tags, compact = false }) {
   return (
     <article
       className={articleClasses}
-      data-reveal
       aria-expanded={isExpanded}
     >
       <div className="project-card-header">
