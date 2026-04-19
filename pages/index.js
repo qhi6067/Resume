@@ -161,6 +161,7 @@ export default function Page() {
             ))}
             <span className="lang-badge">{CONTACT.citizenship}</span>
             <span className="lang-badge">{CONTACT.location}</span>
+            <span className="lang-badge">{CONTACT.phone}</span>
           </div>
 
           <div className="hero-cta">

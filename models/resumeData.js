@@ -125,164 +125,80 @@ export const PROJECTS = [
     name: "Machine Learning Tumor Classification",
     desc:
       "CNN model classifying brain tumor tissues from MRI scans. Achieved ~95% accuracy using RGB on >2,000 images.",
-    tags: [
-      " Python,",
-      " PyTorch,",
-      " CNN,",
-      " Medical Imaging.",
-    ],
+    tags: ["Python", "PyTorch", "CNN", "Medical Imaging"],
   },
   {
     name: "AI Face Detection",
     desc:
       "dlib + OpenCV face detection with ~96% accuracy; bounding-box overlays with robust performance.",
-    tags: [
-      " Python,",
-      " OpenCV,",
-      " dlib,",
-      " Computer Vision.",
-    ],
+    tags: ["Python", "OpenCV", "dlib", "Computer Vision"],
   },
   {
     name: "Project Management System",
     desc:
       "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
-    tags: [
-      " Next.js,",
-      " React,",
-      " Supabase,",
-      " Prisma ORM,",
-      " AI (OpenAI),",
-      " TypeScript,",
-      " SQL.",
-    ],
+    tags: ["Next.js", "React", "Supabase", "Prisma ORM", "AI (OpenAI)", "TypeScript", "SQL"],
   },
   {
     name: "Dynamic System Architecture Builder",
     desc:
       "Desktop and online architecture-design platform for RTLS/HUGS environments. Expanded the original Tkinter + Graphviz builder with ELK auto-layout, a Next.js web implementation, shared configuration mapping, layout and PDF export APIs, URL-driven config loading, and professional SVG/PNG/PDF output generation for Cisco and Non-Cisco HA or singular deployments.",
-    tags: [
-      " Python,",
-      " Tkinter,",
-      " Next.js,",
-      " TypeScript,",
-      " ELK.js,",
-      " Graphviz,",
-      " ReportLab,",
-      " PyInstaller.",
-    ],
+    tags: ["Python", "Tkinter", "Next.js", "TypeScript", "ELK.js", "Graphviz", "ReportLab", "PyInstaller"],
   },
   {
     name: "Environmental Monitoring Analysis Tool",
     desc:
       "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
-    tags: [
-      " Python,",
-      " Flask,",
-      " openpyxl,",
-      " xlrd,",
-      " Rule Engine,",
-      " Excel Automation.",
-    ],
+    tags: ["Python", "Flask", "openpyxl", "xlrd", "Rule Engine", "Excel Automation"],
   },
   {
     name: "LPMC Scheduler",
     desc:
       "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
-    tags: [
-      " Vite,",
-      " JavaScript,",
-      " Node.js,",
-      " Postgres,",
-      " Vercel Blob,",
-      " Excel Processing.",
-    ],
+    tags: ["Vite", "JavaScript", "Node.js", "Postgres", "Vercel Blob", "Excel Processing"],
   },
   {
     name: "Jocelynne's Boots Invoice System",
     desc:
       "Next.js invoicing and operations dashboard for a custom boot business with login flow, client and product management, invoice creation, printable invoice detail pages, status updates, notifications, and Supabase-backed persistence. Structured as a modern admin workspace with reusable UI components and dashboard views for clients, products, invoices, and settings.",
-    tags: [
-      " Next.js,",
-      " React,",
-      " TypeScript,",
-      " Supabase,",
-      " Tailwind CSS,",
-      " Invoice Workflow.",
-    ],
+    tags: ["Next.js", "React", "TypeScript", "Supabase", "Tailwind CSS", "Invoice Workflow"],
   },
   {
     name: "Project Milestone Tracker",
     desc:
       "Mobile-first project tracking web app built with Vite and Supabase. Features role-based access (admin/user), real-time workflow step tracking across 5 milestone phases, progress circle visualization, admin user creation portal, project archiving, and full Supabase-backed persistence. Deployed to Vercel.",
-    tags: [
-      " Vite,",
-      " Supabase,",
-      " JavaScript,",
-      " Role-Based Auth,",
-      " Vercel.",
-    ],
+    tags: ["Vite", "Supabase", "JavaScript", "Role-Based Auth", "Vercel"],
   },
   {
     name: "Inventory Management System",
     desc:
       "Full-stack inventory app automating stock tracking and updates to optimize operations for various company use.",
-    tags: [
-      " JavaScript,",
-      " PHP,",
-      " SQL,",
-      " jQuery,",
-      " Full-stack.",
-    ],
+    tags: ["JavaScript", "PHP", "SQL", "jQuery", "Full-stack"],
   },
   {
     name: "Engine Map Filter Application",
     desc:
       "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
-    tags: [
-      " Python,",
-      " Tkinter,",
-      " PyInstaller,",
-      " Fieldwire,",
-      " Windows.",
-    ],
+    tags: ["Python", "Tkinter", "PyInstaller", "Fieldwire", "Windows"],
   },
   {
     name: "Aeroscout Log Filtering App",
     desc:
       "Desktop application for parsing and analyzing Aeroscout MobileView logs with time-window grouping. Features drag-and-drop processing and automated Excel reporting to accelerate system troubleshooting and diagnostics.",
-    tags: [
-      " Python,",
-      " Tkinter,",
-      " openpyxl,",
-      " PyInstaller.",
-    ],
+    tags: ["Python", "Tkinter", "openpyxl", "PyInstaller"],
   },
   {
     name: "Particle Simulator",
     desc:
       "Python/Django + SQLite simulator; scraped periodic-table data and modeled particle interactions (mass/charge).",
-    tags: [
-      " Python,",
-      " Django,",
-      " SQLite,",
-      " Web Scraping.",
-    ],
+    tags: ["Python", "Django", "SQLite", "Web Scraping"],
   },
   {
     name: "Sias' Salt E-Commerce",
     desc:
       "Premium product landing page for an artisan salt brand featuring custom visual design, responsive navigation, polished motion, immersive hero treatment, Supabase integration, and Three.js-driven presentation touches to create a more elevated online shopping experience.",
-    tags: [
-      " HTML,",
-      " CSS,",
-      " JavaScript,",
-      " Supabase,",
-      " Three.js,",
-      " Responsive Design.",
-    ],
+    tags: ["HTML", "CSS", "JavaScript", "Supabase", "Three.js", "Responsive Design"],
   },
-
 ];
 
 

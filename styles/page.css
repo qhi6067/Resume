@@ -1276,6 +1276,9 @@ body::after {
 
   /* Headings */
   .section-title { font-size: 22px; }
+
+  /* Hide experience pill hint on mobile to prevent wrapping */
+  .section-pill { display: none; }
 }
 
 @media (max-width: 480px) {
