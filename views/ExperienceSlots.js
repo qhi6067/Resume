@@ -1,189 +1,108 @@
-"use client"; // Uses React hooks + browser APIs (must run on client)
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-
-// Controller hook: adds global left/right arrow key navigation.
 import { useKeyNav } from "../controller/useKeyNav";
-
-// Presentational component to render badges as pills.
 import { BadgeRow } from "./BadgeRow";
 
 /**
- * ExperienceSlots
- * @param {Array} items - list of experience objects (from EXPERIENCE in resumeData.js)
+ * ExperienceSlots — Premium horizontal carousel
+ * Redesigned with:
+ * - Cleaner card design with mono dates and role titles
+ * - Active card glow indicator
+ * - Smooth detail panel with spring animation
+ * - 3D tilt on hover (preserved)
+ * - Touch swipe (preserved)
+ * - Keyboard navigation (preserved)
  */
 export function ExperienceSlots({ items }) {
-  // Index of the currently active card.
   const [activeIndex, setActiveIndex] = useState(0);
-
-  // Whether the bullet list is expanded (all bullets) or truncated (first 3).
   const [isExpanded, setIsExpanded] = useState(false);
-
-  // Ref to the horizontal scroll wrapper for cards.
   const slotsWrapRef = useRef(null);
-
-  // Array of refs, one per card, for tilt and scroll calculations.
   const cardRefs = useRef([]);
-
-  // Refs for swipe (touch) handling.
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
 
-  /**
-   * Helper: move carousel by +1 or -1 (used by keys, arrows, and swipe).
-   */
   const changeIndex = (delta) => {
-    setActiveIndex((currentIndex) => {
-      const next = Math.max(0, Math.min(items.length - 1, currentIndex + delta));
-      return next;
-    });
-    setIsExpanded(false); // collapse bullets when changing job
+    setActiveIndex((cur) => Math.max(0, Math.min(items.length - 1, cur + delta)));
+    setIsExpanded(false);
   };
 
-  /**
-   * Hook: keyboard navigation (← / → keys)
-   * The controller calls our callback with +1 (right) or -1 (left).
-   */
-  useKeyNav((delta) => {
-    changeIndex(delta);
-  });
+  useKeyNav((delta) => changeIndex(delta));
 
-  /**
-   * Effect: whenever activeIndex changes, scroll the active card into view
-   * and center it within the wrapper.
-   */
+  // Center the active card in the scrollable strip
   useEffect(() => {
     const wrap = slotsWrapRef.current;
     const activeCard = cardRefs.current[activeIndex];
-
     if (!wrap || !activeCard) return;
 
     const wrapRect = wrap.getBoundingClientRect();
     const cardRect = activeCard.getBoundingClientRect();
-
-    // Calculate scroll position so the active card is centered.
-    const scrollLeft =
-      activeCard.offsetLeft - (wrapRect.width / 2 - cardRect.width / 2);
-
-    wrap.scrollTo({
-      left: scrollLeft,
-      behavior: "smooth",
-    });
+    const scrollLeft = activeCard.offsetLeft - (wrapRect.width / 2 - cardRect.width / 2);
+    wrap.scrollTo({ left: scrollLeft, behavior: "smooth" });
   }, [activeIndex, items.length]);
 
-  /**
-   * handleTilt
-   * Adds a subtle 3D tilt effect to a card based on mouse position.
-   * CSS uses custom properties --rx and --ry for the transform.
-   */
-  const handleTilt = (event, index) => {
+  // 3D tilt on mouse move
+  const handleTilt = (e, index) => {
     const card = cardRefs.current[index];
     if (!card) return;
-
     const rect = card.getBoundingClientRect();
-
-    // Normalize mouse position relative to the card: [-0.5, 0.5]
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-    // Set CSS variables for rotation angles.
-    card.style.setProperty("--rx", `${(-y * 6).toFixed(2)}deg`);
-    card.style.setProperty("--ry", `${(x * 8).toFixed(2)}deg`);
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.setProperty("--rx", `${(-y * 5).toFixed(2)}deg`);
+    card.style.setProperty("--ry", `${(x * 7).toFixed(2)}deg`);
   };
 
-  /**
-   * clearTilt
-   * Resets the card tilt back to neutral.
-   */
   const clearTilt = (index) => {
     const card = cardRefs.current[index];
     if (!card) return;
-
     card.style.setProperty("--rx", "0deg");
     card.style.setProperty("--ry", "0deg");
   };
 
-  /**
-   * Touch handlers: allow swipe left/right on mobile
-   * anywhere on the experience block (.slots).
-   */
-  const handleTouchStart = (event) => {
-    const touch = event.touches[0];
-    touchStartX.current = touch.clientX;
-    touchStartY.current = touch.clientY;
+  // Touch swipe
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
   };
 
-  const handleTouchEnd = (event) => {
-    if (touchStartX.current == null || touchStartY.current == null) return;
-
-    const touch = event.changedTouches[0];
-    const dx = touch.clientX - touchStartX.current;
-    const dy = touch.clientY - touchStartY.current;
-
-    // Reset for next swipe
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
     touchStartX.current = null;
     touchStartY.current = null;
-
-    // Ignore mostly-vertical swipes or tiny movements
-    const absDx = Math.abs(dx);
-    const absDy = Math.abs(dy);
-    const SWIPE_THRESHOLD = 40;
-
-    if (absDx < SWIPE_THRESHOLD || absDx < absDy) {
-      return;
-    }
-
-    // dx < 0 => swipe left (go to next card)
-    if (dx < 0) {
-      changeIndex(+1);
-    } else {
-      changeIndex(-1);
-    }
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    changeIndex(dx < 0 ? 1 : -1);
   };
 
-  // Convenience: active experience object.
   const activeItem = items[activeIndex];
-
-  // Decide which bullets to show based on expanded state.
-  const visibleBullets = isExpanded
-    ? activeItem.bullets
-    : activeItem.bullets.slice(0, 3); // Only first 3 when collapsed
+  const visibleBullets = isExpanded ? activeItem.bullets : activeItem.bullets.slice(0, 3);
 
   return (
-    <div
-      className="slots"
-      data-reveal
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* =================== CARD STRIP WITH ARROWS =================== */}
+    <div className="slots" data-reveal onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+
+      {/* ── CARD STRIP ── */}
       <div className="slots-bar">
-        {/* Previous button (hidden on mobile via CSS) */}
         <button
-          className="nav-btn exp-nav-btn"
+          className="exp-nav-btn"
           onClick={() => changeIndex(-1)}
           disabled={activeIndex === 0}
           aria-label="Previous role"
-          title="Previous"
         >
           ‹
         </button>
 
-        {/* Scrollable wrapper for cards */}
         <div className="slots-wrap" ref={slotsWrapRef}>
           <div className="slots-track">
             {items.map((role, index) => (
               <div
                 key={role.id}
                 ref={(el) => (cardRefs.current[index] = el)}
-                className={`slot-card ${index === activeIndex ? "active" : ""}`}
+                className={`slot-card ${index === activeIndex ? "slot-active" : ""}`}
                 onMouseMove={(e) => handleTilt(e, index)}
                 onMouseLeave={() => clearTilt(index)}
-                onClick={() => {
-                  setActiveIndex(index);
-                  setIsExpanded(false);
-                }}
+                onClick={() => { setActiveIndex(index); setIsExpanded(false); }}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -194,98 +113,76 @@ export function ExperienceSlots({ items }) {
                 }}
               >
                 <div className="slot-inner">
-                  {/* Card title + company + dates */}
-                  <div className="slot-title">
-                    <span className="slot-role">{role.title}</span>
-                    <span className="slot-company"> @ {role.company}</span>
-                  </div>
+                  <div className="slot-index">{String(index + 1).padStart(2, "0")}</div>
+                  <div className="slot-role">{role.title}</div>
+                  <div className="slot-company">{role.company}</div>
                   <div className="slot-dates">{role.dates}</div>
-
-                  {/* Top-level badges on each card */}
-                  <BadgeRow items={role.badges} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Next button (hidden on mobile via CSS) */}
         <button
-          className="nav-btn exp-nav-btn"
+          className="exp-nav-btn"
           onClick={() => changeIndex(+1)}
           disabled={activeIndex === items.length - 1}
           aria-label="Next role"
-          title="Next"
         >
           ›
         </button>
       </div>
 
-      {/* =================== DETAIL PANEL =================== */}
-      <article className="detail card reveal" data-reveal>
-        {/* Job title + company + dates + badges */}
-        <div className="detail-head">
-          <div className="role">
-            {/* Title + company in bold line */}
-            <span className="title">{activeItem.title}</span>
-            <span className="company"> | {activeItem.company}</span>
-
-            {/* Add space so date doesn't touch company text */}
-            <span className="dates">{activeItem.dates}</span>
+      {/* ── DETAIL PANEL ── */}
+      <div className="detail-panel card" key={activeItem.id}>
+        <div className="detail-header">
+          <div className="detail-meta">
+            <h3 className="detail-role">{activeItem.title}</h3>
+            <div className="detail-company-row">
+              <span className="detail-company">{activeItem.company}</span>
+              <span className="detail-separator">·</span>
+              <span className="detail-dates">{activeItem.dates}</span>
+            </div>
           </div>
-
-          {/* Badges rendered as pills with spacing */}
-          <BadgeRow items={activeItem.badges} />
         </div>
 
-        {/* Bullet list for selected role, indented slightly to the right */}
-        <ul className="bullets">
+        <BadgeRow items={activeItem.badges} />
+
+        <ul className="bullets detail-bullets">
           {visibleBullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
         </ul>
 
-        {/* Expand / collapse button to show all bullets */}
         {activeItem.bullets.length > 3 && (
           <button
-            className="link-btn expand-btn"
+            className="detail-expand-btn"
             onClick={() => setIsExpanded((v) => !v)}
             aria-label={isExpanded ? "Show fewer details" : "Show more details"}
           >
-            {isExpanded ? (
-              <>
-                <FaChevronUp /> Show Less
-              </>
-            ) : (
-              <>
-                <FaChevronDown /> Show More
-              </>
-            )}
+            {isExpanded ? <><FaChevronUp /> Collapse</> : <><FaChevronDown /> Show all {activeItem.bullets.length} points</>}
           </button>
         )}
 
-        {/* Progress dots showing position in carousel */}
-        <div className="dots">
-          {items.map((_, index) => (
+        {/* Progress dots */}
+        <div className="detail-dots">
+          {items.map((_, i) => (
             <button
-              key={`experience-dot-${index}`}
-              className={`dot ${index === activeIndex ? "on" : ""}`}
-              aria-label={`Go to role ${index + 1}`}
-              onClick={() => {
-                setActiveIndex(index);
-                setIsExpanded(false);
-              }}
+              key={i}
+              className={`detail-dot ${i === activeIndex ? "dot-on" : ""}`}
+              aria-label={`Go to role ${i + 1}`}
+              onClick={() => { setActiveIndex(i); setIsExpanded(false); }}
             />
           ))}
         </div>
-      </article>
+      </div>
 
-      {/* Local styles remain unchanged (kept in this component) */}
+      {/* ─── SCOPED STYLES ─── */}
       <style jsx>{`
-        /* Layout wrapper for the whole experience block */
         .slots {
-          display: grid;
-          gap: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
         }
 
         .slots-bar {
@@ -295,208 +192,255 @@ export function ExperienceSlots({ items }) {
           gap: 8px;
         }
 
-        /* Left/right arrow buttons */
-        .nav-btn {
-          width: 48px;
-          height: 48px;
-          border-radius: 999px;
-          border: 1px solid rgba(81, 226, 245, 0.3);
-          background: rgba(15, 27, 36, 0.8);
+        /* Arrow buttons */
+        .exp-nav-btn {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          border: 1px solid var(--border);
+          background: var(--surface);
           backdrop-filter: blur(8px);
-          color: #8dd0ff;
+          color: var(--text-2);
           cursor: pointer;
-          font-size: 24px;
+          font-size: 22px;
           font-weight: 300;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 300ms ease;
+          transition: all 200ms ease;
+          flex-shrink: 0;
         }
 
-        .nav-btn:hover:not(:disabled) {
-          background: rgba(24, 52, 73, 0.9);
-          border-color: rgba(81, 226, 245, 0.5);
-          color: #51e2f5;
-          box-shadow: 0 0 20px rgba(81, 226, 245, 0.15);
-          transform: scale(1.05);
+        .exp-nav-btn:hover:not(:disabled) {
+          color: var(--cyan);
+          border-color: var(--cyan-border);
+          box-shadow: 0 0 20px var(--cyan-glow);
+          transform: scale(1.08);
         }
 
-        .nav-btn:disabled {
-          opacity: 0.35;
+        .exp-nav-btn:disabled {
+          opacity: 0.2;
           cursor: not-allowed;
         }
 
-        /* Horizontal scrolling container for cards */
+        /* Scroll track */
         .slots-wrap {
           overflow: hidden;
         }
 
         .slots-track {
           display: flex;
-          gap: 12px;
-          padding: 6px 2px;
+          gap: 10px;
+          padding: 4px 2px;
         }
 
-        /* Individual card styling with tilt */
+        /* Individual cards */
         .slot-card {
           --rx: 0deg;
           --ry: 0deg;
-          min-width: 280px;
-          max-width: 320px;
-          background: radial-gradient(
-            120% 140% at 0% 0%,
-            #0f1e2a,
-            #0b1116
-          );
-          border: 1px solid #182532;
-          border-radius: 16px;
-          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-          transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));
-          transition: transform 240ms ease, border-color 240ms ease,
-            box-shadow 240ms ease;
-          will-change: transform;
+          min-width: 240px;
+          max-width: 290px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 14px;
           cursor: pointer;
+          transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+          transition:
+            transform 220ms ease,
+            border-color 220ms ease,
+            box-shadow 220ms ease;
+          will-change: transform;
+          position: relative;
+          overflow: hidden;
         }
 
-        .slot-card.active {
-          border-color: #2a4d66;
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        .slot-card::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, transparent, transparent);
+          transition: background 220ms ease;
+        }
+
+        .slot-card.slot-active {
+          border-color: var(--cyan-border);
+          box-shadow: 0 0 30px var(--cyan-glow), 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .slot-card.slot-active::before {
+          background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+          opacity: 0.6;
         }
 
         .slot-inner {
-          padding: 14px;
+          padding: 16px;
         }
 
-        .slot-title {
-          font-weight: 700;
-        }
-
-        .slot-role {
-          color: #eaf5ff;
-        }
-
-        .slot-company {
-          color: #94c8e8;
-        }
-
-        .slot-dates {
-          opacity: 0.75;
-          font-size: 13px;
-          margin-top: 2px;
+        .slot-index {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          color: var(--text-3);
+          letter-spacing: 1px;
           margin-bottom: 8px;
         }
 
-        /* Detail panel under the cards */
-        .detail {
-          margin-top: 6px;
+        .slot-card.slot-active .slot-index {
+          color: var(--cyan);
         }
 
-        .detail-head {
-          margin-bottom: 6px;
-        }
-
-        /* Make the top line (title | company) visually strong */
-        .detail-head .role {
-          font-weight: 700;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-        }
-
-        .detail-head .dates {
-          margin-left: 8px; /* creates space between company and date */
-          font-weight: 400;
-          opacity: 0.85;
-        }
-
-        /* Bullets: indent slightly to the right ("tab" effect) */
-        .bullets {
-          margin: 8px 0 0 24px; /* pushes list to the right */
-          padding-left: 4px; /* adjusts bullet alignment */
-        }
-
-        .bullets li {
-          margin: 4px 0;
-          line-height: 1.6;
-        }
-
-        /* Small expand/collapse button under bullets */
-        .expand-btn {
-          margin-top: 10px;
-          padding: 8px 20px;
-          border-radius: 999px;
-          border: 1px solid rgba(81, 226, 245, 0.3);
-          background: rgba(15, 28, 39, 0.8);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          color: #8dd0ff;
+        .slot-role {
           font-size: 13px;
+          font-weight: 600;
+          color: var(--text-1);
+          line-height: 1.3;
+          margin-bottom: 4px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .slot-company {
+          font-size: 12px;
+          color: var(--cyan);
+          margin-bottom: 4px;
           font-weight: 500;
+        }
+
+        .slot-dates {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          color: var(--text-3);
+          letter-spacing: 0.3px;
+        }
+
+        /* Detail panel */
+        .detail-panel {
+          padding: 24px 28px;
+        }
+
+        .detail-header {
+          margin-bottom: 12px;
+        }
+
+        .detail-role {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--text-1);
+          margin: 0 0 6px;
+          line-height: 1.3;
+        }
+
+        .detail-company-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .detail-company {
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--cyan);
+        }
+
+        .detail-separator {
+          color: var(--text-3);
+          font-size: 12px;
+        }
+
+        .detail-dates {
+          font-size: 12px;
+          font-family: var(--font-mono);
+          color: var(--text-3);
+          letter-spacing: 0.3px;
+        }
+
+        .detail-bullets {
+          margin-top: 14px;
+        }
+
+        .detail-expand-btn {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          white-space: nowrap;
+          margin-top: 12px;
+          padding: 7px 16px;
+          font-size: 12px;
+          font-weight: 500;
+          font-family: var(--font-mono);
+          color: var(--text-2);
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 999px;
           cursor: pointer;
-          transition: all 300ms ease;
+          transition: all 200ms ease;
         }
 
-        .expand-btn:hover {
-          background: rgba(24, 52, 73, 0.9);
-          border-color: rgba(81, 226, 245, 0.5);
-          color: #51e2f5;
-          box-shadow: 0 0 20px rgba(81, 226, 245, 0.15);
+        .detail-expand-btn:hover {
+          color: var(--cyan);
+          border-color: var(--cyan-border);
+          box-shadow: 0 0 16px var(--cyan-glow);
         }
 
-        /* Progress dots row */
-        .dots {
-          margin-top: 10px;
+        /* Progress dots */
+        .detail-dots {
           display: flex;
           gap: 6px;
           justify-content: center;
+          margin-top: 16px;
         }
 
-        .dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 999px;
-          background: #274055;
+        .detail-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--border);
           border: none;
           padding: 0;
           cursor: pointer;
+          transition: background 200ms ease, transform 200ms ease;
         }
 
-        .dot.on {
-          background: #8dd0ff;
+        .detail-dot.dot-on {
+          background: var(--cyan);
+          transform: scale(1.4);
+          box-shadow: 0 0 8px var(--cyan-glow);
         }
 
-        /* Mobile responsive adjustments */
+        .detail-dot:hover:not(.dot-on) {
+          background: var(--text-3);
+        }
+
+        /* Mobile */
         @media (max-width: 768px) {
           .slots-bar {
             grid-template-columns: auto 1fr auto;
             gap: 4px;
           }
 
-          .nav-btn {
-            width: 36px;
-            height: 36px;
-            font-size: 18px;
+          .exp-nav-btn {
+            display: none;
           }
 
           .slot-card {
-            min-width: 200px;
-            max-width: 260px;
+            min-width: 180px;
+            max-width: 230px;
           }
 
           .slot-inner {
-            padding: 10px;
+            padding: 12px;
           }
 
-          .slot-title {
-            font-size: 14px;
+          .detail-panel {
+            padding: 18px 18px;
           }
 
-          .slot-dates {
-            font-size: 11px;
+          .detail-role {
+            font-size: 16px;
           }
         }
       `}</style>

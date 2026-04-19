@@ -1,78 +1,105 @@
-// components/ProjectCard.js
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
-export function ProjectCard({ name, desc, tags, compact = false }) {
+/**
+ * ProjectCard
+ *
+ * Desktop: shows full description with line-clamp (5 lines).
+ *   - Detects if text is actually clamped via ResizeObserver.
+ *   - Shows "read more →" only when text is genuinely overflowing.
+ *   - All cards in a row are equal height via CSS grid stretch.
+ *
+ * Mobile (compact): collapses to title only; "Expand" reveals content.
+ */
+export function ProjectCard({ name, desc, tags, compact = false, index = 0 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const maxLength = 130; // char limit before truncation
+  const [isClamped, setIsClamped] = useState(false);
+  const descRef = useRef(null);
 
-  // Only truncate if description is long enough
-  const shouldTruncate = desc.length > maxLength;
+  // Detect if the description text is actually overflowing (line-clamped)
+  useEffect(() => {
+    if (compact) return;
+    const el = descRef.current;
+    if (!el) return;
 
-  // If truncated and not expanded, show substring + legacy hint
-  const displayDesc = compact
-    ? desc
-    : shouldTruncate && !isExpanded
-      ? desc.slice(0, maxLength)
-      : desc;
+    const check = () => {
+      setIsClamped(el.scrollHeight > el.clientHeight + 2);
+    };
+
+    check();
+
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [compact, desc, isExpanded]);
 
   const isCompactCollapsed = compact && !isExpanded;
-  const articleClasses = [
-    "card",
-    "project",
-    shouldTruncate && !compact ? "project-card-interactive" : "",
-    compact ? "project-card-compact" : "",
-    isExpanded ? "project-card-expanded" : "project-card-collapsed",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const num = String(index + 1).padStart(2, "0");
 
   return (
     <article
-      className={articleClasses}
+      className={[
+        "card project",
+        compact ? "project-card-compact" : "project-card-desktop",
+        isExpanded ? "project-card-expanded" : "project-card-collapsed",
+      ].join(" ")}
       aria-expanded={isExpanded}
     >
+      <span className="project-number">{num}</span>
+
       <div className="project-card-header">
         <h3 className="h3">{name}</h3>
 
-        {compact ? (
+        {/* Mobile-only collapse/expand toggle */}
+        {compact && (
           <button
             type="button"
             className="project-toggle-btn"
             onClick={() => setIsExpanded(!isExpanded)}
             aria-expanded={isExpanded}
           >
-            {isExpanded ? "Hide details" : "Expand"}
+            {isExpanded ? "Collapse" : "Expand"}
           </button>
-        ) : null}
+        )}
       </div>
 
-      {!isCompactCollapsed ? (
+      {/* Show content on desktop always; mobile only when expanded */}
+      {!isCompactCollapsed && (
         <>
-          {/* Short project description with read more toggle */}
+          {/* Description — line-clamped on desktop until expanded */}
           <p
-            className="project-desc"
-            onClick={!compact && shouldTruncate ? () => setIsExpanded(!isExpanded) : undefined}
+            ref={descRef}
+            className={[
+              "project-desc",
+              !compact && !isExpanded ? "desc-clamped" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
           >
-            {displayDesc}
-            {!compact && shouldTruncate && !isExpanded && (
-              <span className="read-more-hint">... Read more</span>
-            )}
-            {!compact && shouldTruncate && isExpanded && (
-              <span className="read-more-hint"> (Show less)</span>
-            )}
+            {desc}
           </p>
 
-          {/* Tags row (tech stack, etc.) */}
+          {/* "read more / see less" — desktop only, only when actually clamped */}
+          {!compact && (isClamped || isExpanded) && (
+            <button
+              type="button"
+              className="see-more-btn"
+              onClick={() => setIsExpanded((v) => !v)}
+            >
+              {isExpanded ? "↑ see less" : "read more →"}
+            </button>
+          )}
+
+          {/* Tech tags */}
           <div className="badge-row project-tags">
-            {tags.map((tag, index) => (
-              <span className="badge project-tag" key={index}>
+            {tags.map((tag, i) => (
+              <span className="badge project-tag" key={i}>
                 {tag}
               </span>
             ))}
           </div>
         </>
-      ) : null}
+      )}
     </article>
   );
 }

@@ -1,32 +1,106 @@
-//animation to reveal next text on scroll 
-"use client"; // client side for React use
+"use client";
 
-import {useEffect} from "react"; // import from React
+import { useEffect } from "react";
 
-//reveal on scroll controller/animation
+/**
+ * useRevealOnScroll
+ *
+ * Direction-aware scroll reveal with:
+ * - data-reveal         → slide up (default)
+ * - data-reveal="left"  → slide from left
+ * - data-reveal="right" → slide from right
+ * - data-reveal="scale" → scale up
+ * - data-stagger        → stagger-reveal all direct children
+ *
+ * Also handles:
+ * - [data-count] → animated number counter on reveal
+ * - .section elements → adds .section-in class for title underline animation
+ */
+export function useRevealOnScroll() {
+  useEffect(() => {
+    // Gather all reveal targets (including valued attributes)
+    const revealTargets = document.querySelectorAll(
+      "[data-reveal], [data-stagger], .section"
+    );
+    const countTargets = document.querySelectorAll("[data-count]");
 
-export function useRevealOnScroll(){ //call this function when...
-    useEffect(() =>{ //useEffect runs after comp mounting
-        const targets = document.querySelectorAll("[data-reveal"); // select all elements with that attribute
-        const io = new IntersectionObserver( // create intersectionobserver to watch wehn elements enter viewport
-            (entries) =>{
-                //looping through new observed (in viewport) entries
-                entries.forEach((e)=>{
-                    if(e.isIntersecting){
-                        //if its entering viewport
-                        e.target.classList.add('in')// add class "in"
-                        io.unobserve(e.target);// stop obversing once animation is done to save opwer/memory
-                    }
-                });
-            },
-            {
-                threshold: 0.15, //trigger when 15% of element is visible
-                rootMargin: "0px 0px -10% 0px", //adjust bottom margin to trigger slightly earlier Top (up right down left)
-            }
-        );
-        targets.forEach((el) => io.observe(el)); // observe each target element
-        //cleanup/ dsconnect when component unmounts
-        return () => io.disconnect();
+    // ── Intersection observer for reveals ──────────────────────────
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
 
-    }, []); //empty dependencies
+          const el = entry.target;
+
+          // Mark as revealed
+          el.classList.add("in");
+
+          // For sections, also add section-in for the title underline animation
+          if (el.classList.contains("section")) {
+            el.classList.add("section-in");
+          }
+
+          revealObserver.unobserve(el);
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -8% 0px",
+      }
+    );
+
+    revealTargets.forEach((el) => revealObserver.observe(el));
+
+    // ── Counter animation ──────────────────────────────────────────
+    const counterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const el = entry.target;
+          const target = parseInt(el.dataset.count, 10);
+          if (isNaN(target)) return;
+
+          animateCount(el, target);
+          counterObserver.unobserve(el);
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    countTargets.forEach((el) => counterObserver.observe(el));
+
+    return () => {
+      revealObserver.disconnect();
+      counterObserver.disconnect();
+    };
+  }, []);
+}
+
+/**
+ * Animates a number from 0 → target over ~900ms with easing.
+ * Uses requestAnimationFrame for smooth performance.
+ */
+function animateCount(el, target) {
+  const duration = 900;
+  const start = performance.now();
+
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+
+    el.textContent = current;
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = target;
+    }
+  }
+
+  requestAnimationFrame(step);
 }

@@ -3,93 +3,92 @@
 import { useEffect, useRef } from "react";
 
 /**
- * useParallaxScroll - Adds fun parallax and dynamic effects on scroll
- * Elements with data-parallax attribute will move at different speeds
- * Elements with data-float will have floating animations
+ * useDotNavTracking
+ *
+ * Tracks which section is currently in view and updates:
+ * 1. The right-side dot navigation (`.dot-nav-item.dot-active`)
+ * 2. The floating top nav links (`.nav-links button.nav-active`)
+ * 3. Shows/hides the dot nav after user scrolls past the hero
  */
-export function useParallaxScroll() {
-    const rafRef = useRef(null);
+export function useDotNavTracking(sectionIds) {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-    useEffect(() => {
-        const parallaxElements = document.querySelectorAll("[data-parallax]");
-        const floatElements = document.querySelectorAll("[data-float]");
+    const dotNav = document.querySelector(".dot-nav");
+    const heroHeight = document.querySelector(".hero-section")?.offsetHeight ?? 400;
 
-        // Add staggered floating animation to float elements
-        floatElements.forEach((el, index) => {
-            el.style.animationDelay = `${index * 0.15}s`;
-        });
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
 
-        const handleScroll = () => {
-            if (rafRef.current) return;
+      // Show dot nav after hero
+      if (dotNav) {
+        if (scrollY > heroHeight * 0.6) {
+          dotNav.classList.add("dot-nav-visible");
+        } else {
+          dotNav.classList.remove("dot-nav-visible");
+        }
+      }
 
-            rafRef.current = requestAnimationFrame(() => {
-                const scrolled = window.scrollY;
-                const viewportHeight = window.innerHeight;
+      // Find active section
+      let activeId = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.45) {
+          activeId = id;
+        }
+      }
 
-                parallaxElements.forEach((el) => {
-                    const rect = el.getBoundingClientRect();
-                    const speed = parseFloat(el.dataset.parallax) || 0.1;
-                    const inView = rect.top < viewportHeight && rect.bottom > 0;
+      // Update dot nav active state
+      document.querySelectorAll(".dot-nav-item").forEach((dot) => {
+        const isActive = dot.dataset.section === activeId;
+        dot.classList.toggle("dot-active", isActive);
+      });
 
-                    if (inView) {
-                        const yPos = (rect.top - viewportHeight / 2) * speed;
-                        el.style.transform = `translateY(${yPos}px)`;
-                    }
-                });
+      // Update floating nav active state
+      document.querySelectorAll(".nav-links button[data-section]").forEach((btn) => {
+        btn.classList.toggle("nav-active", btn.dataset.section === activeId);
+      });
+    };
 
-                rafRef.current = null;
-            });
-        };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // run once on mount
 
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        handleScroll(); // Initial call
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-            if (rafRef.current) {
-                cancelAnimationFrame(rafRef.current);
-            }
-        };
-    }, []);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [sectionIds]);
 }
 
 /**
- * Enhanced reveal with staggered animations and fun effects
+ * useFloatingNavVisibility
+ *
+ * The floating top nav shows immediately (always visible in this design).
+ * This hook handles fade-in after welcome overlay clears.
  */
-export function useFunReveal() {
-    useEffect(() => {
-        const sections = document.querySelectorAll(".section");
-        const cards = document.querySelectorAll(".card");
+export function useFloatingNavVisibility(show) {
+  useEffect(() => {
+    const nav = document.querySelector(".floating-nav");
+    if (!nav) return;
 
-        // Add stagger index to cards for cascading animation
-        cards.forEach((card, index) => {
-            card.style.setProperty("--stagger-delay", `${index * 0.08}s`);
-        });
-
-        const io = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("in");
-
-                        // Add extra fun class for sections
-                        if (entry.target.classList.contains("section")) {
-                            entry.target.classList.add("section-visible");
-                        }
-
-                        io.unobserve(entry.target);
-                    }
-                });
-            },
-            {
-                threshold: 0.1,
-                rootMargin: "0px 0px -5% 0px",
-            }
-        );
-
-        sections.forEach((el) => io.observe(el));
-        cards.forEach((el) => io.observe(el));
-
-        return () => io.disconnect();
-    }, []);
+    if (show) {
+      // Small delay after welcome overlay clears
+      const t = setTimeout(() => {
+        nav.classList.remove("nav-hidden");
+      }, 300);
+      return () => clearTimeout(t);
+    } else {
+      nav.classList.add("nav-hidden");
+    }
+  }, [show]);
 }
+
+/**
+ * useFunReveal (kept for compatibility)
+ * Now a no-op since useRevealOnScroll handles everything.
+ */
+export function useFunReveal() {}
+
+/**
+ * useParallaxScroll (kept for compatibility)
+ */
+export function useParallaxScroll() {}

@@ -1,12 +1,12 @@
-"use client"; // This page uses client-side hooks like useRevealOnScroll.
+"use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 
-// Controller for scroll animations (IntersectionObserver logic).
+// Controllers
 import { useRevealOnScroll } from "../controller/useRevealOnScroll";
-import { useFunReveal } from "../controller/useParallaxScroll";
+import { useDotNavTracking, useFloatingNavVisibility } from "../controller/useParallaxScroll";
 
-// Model data (your resume content).
+// Data
 import {
   CONTACT,
   EXPERIENCE as ExperienceData,
@@ -18,338 +18,338 @@ import {
   TOOLS as ToolsData,
 } from "../models/resumeData";
 
-// View components (pure presentation).
+// Views
 import { SectionTitle } from "../views/SectionTitle";
 import { BadgeRow } from "../views/BadgeRow";
 import { ExperienceSlots } from "../views/ExperienceSlots";
 import { ProjectCard } from "../views/ProjectCard";
 import { WelcomeOverlay } from "../views/WelcomeOverlay";
+import { BB8Toggle } from "../views/BB8Toggle";
 
-/**
- * Main page component:
- * - Wires controllers (hooks) + models (data) + views (UI components).
- * - Renders the full resume/portfolio layout.
- */
+// Section IDs used by dot nav and scroll tracking
+const SECTION_IDS = ["hero", "experience", "projects", "education", "skills", "tools", "leadership"];
+
 export default function Page() {
-  // State to control welcome overlay visibility
   const [showWelcome, setShowWelcome] = useState(true);
-  // State to control projects expand/collapse
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [isMobileProjects, setIsMobileProjects] = useState(false);
+  // true = DARK (checked), false = LIGHT (unchecked)
+  const [isDark, setIsDark] = useState(true);
 
-  // Start scroll-reveal behavior once elements enter the viewport.
+  // Activate scroll animations
   useRevealOnScroll();
 
-  // Add fun staggered animations
-  useFunReveal();
+  // Track active section for dot nav + floating nav
+  useDotNavTracking(SECTION_IDS);
 
+  // Show floating nav after welcome overlay clears
+  useFloatingNavVisibility(!showWelcome);
+
+  // Mobile breakpoint detection
   useEffect(() => {
-    if (typeof window === "undefined") return undefined;
-
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-    const syncProjectLayout = (event) => {
-      setIsMobileProjects(event.matches);
-    };
-
-    syncProjectLayout(mediaQuery);
-    mediaQuery.addEventListener("change", syncProjectLayout);
-
-    return () => mediaQuery.removeEventListener("change", syncProjectLayout);
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = (e) => setIsMobileProjects(e.matches);
+    sync(mq);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
-  // //download pdf version of file Will add later
-  // const handleDownloadPDF = async () => {
-  //   const jsPDF = (await import("jspdf")).default;
-  //   const html2canvas = (await import("html2canvas")).default;
+  // Theme persistence + apply data-theme attribute
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = localStorage.getItem("theme");
+    if (saved === "light") setIsDark(false);
+  }, []);
 
-  //   const page = document.querySelector("main.site");
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const theme = isDark ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [isDark]);
 
-  //   // render screen to canvas
-  //   const canvas = await html2canvas(page, { scale: 2 });
-  //   const imgData = canvas.toDataURL("image/png");
+  const handleThemeToggle = () => setIsDark((v) => !v);
 
-  //   const pdf = new jsPDF("p", "mm", "a4");
-
-  //   // scale to fit A4 width
-  //   const pdfWidth = pdf.internal.pageSize.getWidth();
-  //   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  //   pdf.save("JaimePerez_Resume.pdf");
-  // };
-
-
-  /**
-   * Safely copy email to clipboard when user clicks "Copy email" button.
-   * Includes a fallback alert if Clipboard API is not available.
-   */
-  const handleCopyEmail = () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-      navigator.clipboard
-        .writeText(CONTACT.email)
-        .catch((error) => {
-          console.error("Failed to copy email to clipboard:", error);
-          alert("Sorry, copying failed. You can copy the email manually.");
-        });
-    } else {
-      alert("Clipboard copy is not supported here. Please copy the email manually.");
-    }
+  // Smooth scroll to section
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  /**
-   * Scroll helper to "jump" to a section using its ID.
-   * This replaces <a href="#section"> so links keep working no matter what.
-   */
-  const scrollToSection = (sectionId) => {
-    if (typeof document === "undefined") return; // Safety for SSR.
-
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({
-        behavior: "smooth", // Smooth scroll animation.
-        block: "start",     // Align the section to the top of the viewport.
-      });
-    }
+  // Copy email
+  const handleCopyEmail = () => {
+    navigator.clipboard?.writeText(CONTACT.email).catch(() => {
+      alert("Copy not supported — please copy manually.");
+    });
   };
 
   const initialProjectCount = isMobileProjects ? 3 : 6;
-  const visibleProjects = showAllProjects
-    ? ProjectData
-    : ProjectData.slice(0, initialProjectCount);
+  const visibleProjects = showAllProjects ? ProjectData : ProjectData.slice(0, initialProjectCount);
   const remainingProjects = Math.max(ProjectData.length - initialProjectCount, 0);
 
   return (
     <>
-      {/* Welcome overlay with typing animation */}
-      {showWelcome && (
-        <WelcomeOverlay onComplete={() => setShowWelcome(false)} />
-      )}
+      {showWelcome && <WelcomeOverlay onComplete={() => setShowWelcome(false)} />}
+
+      {/* ──────────────── FLOATING TOP NAV ──────────────── */}
+      <nav className={`floating-nav nav-hidden`} aria-label="Site navigation">
+        <span className="nav-brand">JP</span>
+
+        <div className="nav-links">
+          {SECTION_IDS.slice(1).map((id) => (
+            <button
+              key={id}
+              type="button"
+              data-section={id}
+              onClick={() => scrollTo(id)}
+            >
+              {id.charAt(0).toUpperCase() + id.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        <div className="nav-theme-wrap">
+          <BB8Toggle checked={isDark} onChange={handleThemeToggle} />
+        </div>
+
+        <a
+          href="/Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-pdf-btn"
+        >
+          {/* Document icon */}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+          </svg>
+          PDF
+        </a>
+      </nav>
+
+      {/* ──────────────── RIGHT DOT NAV ──────────────── */}
+      <nav className="dot-nav" aria-label="Section navigation">
+        <button className="dot-nav-item dot-active" data-section="hero" data-label="Top" aria-label="Scroll to top" onClick={() => scrollTo("hero")} />
+        <button className="dot-nav-item" data-section="experience" data-label="Experience" aria-label="Scroll to Experience" onClick={() => scrollTo("experience")} />
+        <button className="dot-nav-item" data-section="projects" data-label="Projects" aria-label="Scroll to Projects" onClick={() => scrollTo("projects")} />
+        <button className="dot-nav-item" data-section="education" data-label="Education" aria-label="Scroll to Education" onClick={() => scrollTo("education")} />
+        <button className="dot-nav-item" data-section="skills" data-label="Skills" aria-label="Scroll to Skills" onClick={() => scrollTo("skills")} />
+        <button className="dot-nav-item" data-section="tools" data-label="Tools" aria-label="Scroll to Tools" onClick={() => scrollTo("tools")} />
+        <button className="dot-nav-item" data-section="leadership" data-label="Leadership" aria-label="Scroll to Leadership" onClick={() => scrollTo("leadership")} />
+      </nav>
 
       <main className={`site ${showWelcome ? "site-blur" : ""}`}>
-        {/* ================= HEADER ================= */}
-        <header className="header card reveal" data-reveal>
-          {/* PDF Download/View Button */}
-          <a
-            href="/Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pdf-btn"
-            aria-label="View PDF Resume"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ marginRight: '6px' }}
+
+        {/* ══════════════════════════════════════
+            HERO
+        ══════════════════════════════════════ */}
+        <section id="hero" className="hero-section">
+
+          <div className="hero-eyebrow">Solutions Engineer &amp; Software Developer</div>
+
+          <h1 className="hero-name">
+            <span className="gradient-text">{CONTACT.name}</span>
+          </h1>
+
+          <p className="hero-subtitle">
+            Tech · Healthcare · Strategy · B2B Sales
+          </p>
+
+          <div className="hero-languages">
+            {LanguagesData.map((lang) => (
+              <span key={lang} className="lang-badge">{lang}</span>
+            ))}
+            <span className="lang-badge">{CONTACT.citizenship}</span>
+            <span className="lang-badge">{CONTACT.location}</span>
+          </div>
+
+          <div className="hero-cta">
+            <button type="button" className="btn-primary" onClick={() => scrollTo("experience")}>
+              View Experience ↓
+            </button>
+            <a href="/Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-secondary">
+              Download PDF
+            </a>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              className="btn-secondary"
             >
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14,2 14,8 20,8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10,9 9,9 8,9" />
-            </svg>
-            View PDF
-          </a>
+              Send Email
+            </a>
+          </div>
 
-          <div className="hero">
-            <h1 className="name">
-              {/* Highlight first name in gradient */}
-              <span className="accent">
-                {CONTACT.name.split(" ")[0]}
-              </span>{" "}
-              {/* Rest of name */}
-              {CONTACT.name.split(" ").slice(1).join(" ")}
-            </h1>
-
-            <p className="subtitle">
-              Solutions Engineer • Software Engineer • Medical • B2B Sales
-            </p>
-
-            {/* Languages badges inline */}
-            <div className="languages-inline">
-              {LanguagesData.map((lang) => (
-                <span key={lang} className="lang-badge">{lang}</span>
-              ))}
+          {/* Stats counters */}
+          <div className="hero-stats">
+            <div className="stat">
+              <div className="stat-num-wrap">
+                <span className="stat-num" data-count="13">0</span>
+                <span className="stat-suffix">+</span>
+              </div>
+              <span className="stat-label">Projects Built</span>
+            </div>
+            <div className="stat">
+              <div className="stat-num-wrap">
+                <span className="stat-num" data-count="5">0</span>
+                <span className="stat-suffix">+</span>
+              </div>
+              <span className="stat-label">Years Experience</span>
+            </div>
+            <div className="stat">
+              <div className="stat-num-wrap">
+                <span className="stat-num" data-count="2">0</span>
+              </div>
+              <span className="stat-label">Languages</span>
+            </div>
+            <div className="stat">
+              <div className="stat-num-wrap">
+                <span className="stat-num" data-count="3">0</span>
+              </div>
+              <span className="stat-label">Domains</span>
             </div>
           </div>
 
-          {/* Top navigation: buttons that scroll to each section */}
-          <nav className="nav">
-            <button type="button" onClick={() => scrollToSection("experience")}>
-              Experience
-            </button>
-            <button type="button" onClick={() => scrollToSection("projects")}>
-              Projects
-            </button>
-            <button type="button" onClick={() => scrollToSection("education")}>
-              Education
-            </button>
-            <button type="button" onClick={() => scrollToSection("skills")}>
-              Skills
-            </button>
-            <button type="button" onClick={() => scrollToSection("tools")}>
-              Tools
-            </button>
-            <button type="button" onClick={() => scrollToSection("leadership")}>
-              Leadership
-            </button>
-          </nav>
-
-          {/* Contact strip under header */}
-          <div className="contact">
-            <ul className="contact-list">
-              <li>
-                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-              </li>
-              <li>
-                <a href={`tel:${CONTACT.phone.replace(/[^0-9]/g, "")}`}>
-                  {CONTACT.phone}
-                </a>
-              </li>
-              <li>{CONTACT.location}</li>
-              <li>{CONTACT.citizenship}</li>
-              <li>
-                <button
-                  className="link-btn"
-                  onClick={handleCopyEmail}
-                  aria-label="Copy email to clipboard"
-                  title="Copy email"
-                >
-                  Copy email
-                </button>
-              </li>
-            </ul>
+          {/* Scroll indicator */}
+          <div className="hero-scroll" aria-hidden="true">
+            <div className="hero-scroll-line" />
+            <span>Scroll</span>
           </div>
-
-        </header>
-
-        {/* ============== EXPERIENCE ============== */}
-        <section id="experience" className="section reveal" data-reveal>
-          <SectionTitle pill="Use ← → keys">
-            Professional Experience
-          </SectionTitle>
-
-          {/* Interactive horizontal experience cards */}
-          <ExperienceSlots items={ExperienceData} />
         </section>
 
-        {/* ============== PROJECTS ============== */}
-        <section id="projects" className="section reveal" data-reveal>
-          <SectionTitle>Projects</SectionTitle>
+        {/* ── Content below hero ── */}
+        <div className="content-wrap">
 
-          <div className="grid">
-            {visibleProjects.map((project_item, index) => (
-              <Fragment key={project_item.name}>
-                {/* Individual project card - add 'in' class for items beyond first 6 when expanded */}
-                <div className={index >= initialProjectCount ? "reveal-instant" : ""}>
-                  <ProjectCard {...project_item} compact={isMobileProjects} />
+          {/* ══════════════════════════════════════
+              EXPERIENCE
+          ══════════════════════════════════════ */}
+          <section id="experience" className="section" data-reveal>
+            <SectionTitle num={1} pill="← → keys or swipe">
+              Professional Experience
+            </SectionTitle>
+            <ExperienceSlots items={ExperienceData} />
+          </section>
+
+          {/* ══════════════════════════════════════
+              PROJECTS
+          ══════════════════════════════════════ */}
+          <section id="projects" className="section" data-reveal>
+            <SectionTitle num={2}>Projects</SectionTitle>
+
+            <div className="grid" data-stagger>
+              {visibleProjects.map((project, index) => (
+                <Fragment key={project.name}>
+                  <div className={index >= initialProjectCount ? "reveal-instant" : ""}>
+                    <ProjectCard
+                      {...project}
+                      index={index}
+                      compact={isMobileProjects}
+                    />
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+
+            {ProjectData.length > initialProjectCount && (
+              <button
+                type="button"
+                className="expand-btn"
+                onClick={() => setShowAllProjects(!showAllProjects)}
+              >
+                {showAllProjects
+                  ? "↑ Show Less"
+                  : isMobileProjects
+                    ? `Show ${remainingProjects} More ↓`
+                    : `Show All ${ProjectData.length} Projects ↓`}
+              </button>
+            )}
+          </section>
+
+          {/* ══════════════════════════════════════
+              EDUCATION
+          ══════════════════════════════════════ */}
+          <section id="education" className="section" data-reveal>
+            <SectionTitle num={3}>Education</SectionTitle>
+
+            {EducationData.map((entry) => (
+              <div className="card" key={entry.school} data-reveal="left">
+                <p className="edu-dates">{entry.dates}</p>
+                <h3 className="edu-school">{entry.school}</h3>
+                <p className="edu-degree">{entry.degree}</p>
+                <div className="edu-honors">
+                  {entry.bullets.map((b) => (
+                    <span key={b} className="edu-honor">★ {b}</span>
+                  ))}
                 </div>
-
-                {/* Visual separator between top and bottom grid rows */}
-                {!isMobileProjects && index === 2 && <div className="grid-separator" />}
-              </Fragment>
+              </div>
             ))}
-          </div>
+          </section>
 
-          {/* Expand/Collapse button if more than the initial count */}
-          {ProjectData.length > initialProjectCount && (
-            <button
-              type="button"
-              className="expand-btn"
-              onClick={() => setShowAllProjects(!showAllProjects)}
-            >
-              {showAllProjects
-                ? "Show Less"
-                : isMobileProjects
-                  ? `Show ${remainingProjects} More`
-                  : `Show All ${ProjectData.length} Projects`}
-            </button>
-          )}
-        </section>
+          {/* ══════════════════════════════════════
+              SKILLS
+          ══════════════════════════════════════ */}
+          <section id="skills" className="section" data-reveal>
+            <SectionTitle num={4}>Skills</SectionTitle>
 
-        {/* ============== EDUCATION ============== */}
-        <section id="education" className="section reveal" data-reveal>
-          <SectionTitle>Education</SectionTitle>
+            <div className="skills-grid" data-stagger>
+              {Object.entries({
+                "Programming": SkillsData.programming,
+                "Infrastructure & Systems": SkillsData.infrastructure,
+                "Software Development": SkillsData.software,
+                "Healthcare & Medical": SkillsData.medical,
+                "Soft Skills": SkillsData.soft,
+                "Sales & Client Relations": SkillsData.sales,
+              }).map(([label, items]) => (
+                <div key={label} className="skill-category">
+                  <div className="skill-category-label">{label}</div>
+                  <BadgeRow items={items} />
+                </div>
+              ))}
+            </div>
+          </section>
 
-          {EducationData.map((education_entry) => (
-            <div
-              className="card"
-              key={education_entry.school}
-              data-reveal
-            >
-              {/* School + degree + dates on one line */}
-              <h3 className="h3">
-                {education_entry.school} — {education_entry.degree} {/* removed dates */}
-              </h3>
+          {/* ══════════════════════════════════════
+              TOOLS
+          ══════════════════════════════════════ */}
+          <section id="tools" className="section" data-reveal>
+            <SectionTitle num={5}>Tools &amp; Platforms</SectionTitle>
 
-              {/* Bullet list of honors/achievements */}
-              <ul className="bullets">
-                {education_entry.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
+            <div className="card" data-reveal="scale">
+              <div className="tools-wrap">
+                <BadgeRow items={ToolsData} />
+              </div>
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════
+              LEADERSHIP
+          ══════════════════════════════════════ */}
+          <section id="leadership" className="section" data-reveal>
+            <SectionTitle num={6}>Leadership &amp; Organizations</SectionTitle>
+
+            <div className="card" data-reveal="right">
+              <ul className="leadership-list">
+                {Leadership.map((entry) => (
+                  <li key={entry}>{entry}</li>
                 ))}
               </ul>
             </div>
-          ))}
-        </section>
+          </section>
 
-        {/* ============== SKILLS ============== */}
-        <section id="skills" className="section reveal" data-reveal>
-          <SectionTitle>Skills</SectionTitle>
+          {/* ══════════════════════════════════════
+              FOOTER
+          ══════════════════════════════════════ */}
+          <footer className="footer" data-reveal>
+            <div className="footer-inner">
+              <span>© {new Date().getFullYear()}</span>
+              <div className="footer-dot" />
+              <span>{CONTACT.name}</span>
+              <div className="footer-dot" />
+              <a href={`mailto:${CONTACT.email}`} style={{ color: "var(--cyan)", opacity: 0.7 }}>
+                {CONTACT.email}
+              </a>
+            </div>
+          </footer>
 
-          <div className="card" data-reveal>
-            <h4 className="h4">Programming</h4>
-            <BadgeRow items={SkillsData.programming} />
-
-            <h4 className="h4">Infrastructure & Systems</h4>
-            <BadgeRow items={SkillsData.infrastructure} />
-
-            <h4 className="h4">Software Development</h4>
-            <BadgeRow items={SkillsData.software} />
-
-            <h4 className="h4">Healthcare & Medical</h4>
-            <BadgeRow items={SkillsData.medical} />
-
-            <h4 className="h4">Soft Skills</h4>
-            <BadgeRow items={SkillsData.soft} />
-
-            <h4 className="h4">Sales & Client Relations</h4>
-            <BadgeRow items={SkillsData.sales} />
-          </div>
-        </section>
-
-        {/* ============== TOOLS ============== */}
-        <section id="tools" className="section reveal" data-reveal>
-          <SectionTitle>Tools & Platforms</SectionTitle>
-
-          <div className="card" data-reveal>
-            <BadgeRow items={ToolsData} />
-          </div>
-        </section>
-
-        {/* ============== LEADERSHIP ============== */}
-        <section id="leadership" className="section reveal" data-reveal>
-          <SectionTitle>Leadership &amp; Organizations</SectionTitle>
-
-          <div className="card" data-reveal>
-            <ul className="bullets">
-              {Leadership.map((entry) => (
-                <li key={entry}>{entry}</li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ============== FOOTER ============== */}
-        <footer className="footer reveal" data-reveal>
-          <span>
-            © {new Date().getFullYear()} {CONTACT.name}. All rights reserved.
-          </span>
-        </footer>
+        </div>{/* end .content-wrap */}
       </main>
     </>
   );
