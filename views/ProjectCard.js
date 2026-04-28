@@ -15,6 +15,7 @@ export function ProjectCard({ name, desc, tags, compact = false, index = 0 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const descRef = useRef(null);
+  const toggleBtnRef = useRef(null);
 
   // Detect if the description text is actually overflowing (line-clamped)
   useEffect(() => {
@@ -53,9 +54,19 @@ export function ProjectCard({ name, desc, tags, compact = false, index = 0 }) {
         {/* Mobile-only collapse/expand toggle */}
         {compact && (
           <button
+            ref={toggleBtnRef}
             type="button"
             className="project-toggle-btn"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => {
+              if (isExpanded) {
+                setIsExpanded(false);
+                setTimeout(() => {
+                  toggleBtnRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 50);
+              } else {
+                setIsExpanded(true);
+              }
+            }}
             aria-expanded={isExpanded}
           >
             {isExpanded ? "Collapse" : "Expand"}

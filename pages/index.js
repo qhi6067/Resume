@@ -33,6 +33,7 @@ export default function Page() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [isMobileProjects, setIsMobileProjects] = useState(false);
+  const expandBtnRef = useRef(null);
   // true = DARK (checked), false = LIGHT (unchecked)
   const [isDark, setIsDark] = useState(true);
 
@@ -93,7 +94,9 @@ export default function Page() {
 
       {/* ──────────────── FLOATING TOP NAV ──────────────── */}
       <nav className={`floating-nav nav-hidden`} aria-label="Site navigation">
-        <span className="nav-brand">JP</span>
+        <div className="nav-brand-logo-sep">
+          <div className="nav-brand-logo" role="img" aria-label="LLC Logo" />
+        </div>
 
         <div className="nav-links">
           {SECTION_IDS.slice(1).map((id) => (
@@ -251,9 +254,20 @@ export default function Page() {
 
             {ProjectData.length > initialProjectCount && (
               <button
+                ref={expandBtnRef}
                 type="button"
                 className="expand-btn"
-                onClick={() => setShowAllProjects(!showAllProjects)}
+                onClick={() => {
+                  if (showAllProjects) {
+                    // Collapse first, then scroll to button after layout settles
+                    setShowAllProjects(false);
+                    setTimeout(() => {
+                      expandBtnRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }, 50);
+                  } else {
+                    setShowAllProjects(true);
+                  }
+                }}
               >
                 {showAllProjects
                   ? "↑ Show Less"
