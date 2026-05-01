@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# LaTeX build artifacts (keep resume.tex, ignore compilation output)
+/latex/*.aux
+/latex/*.log
+/latex/*.out
+/latex/*.fls
+/latex/*.fdb_latexmk
+/latex/*.synctex.gz
