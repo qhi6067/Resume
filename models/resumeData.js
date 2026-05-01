@@ -27,7 +27,7 @@ export const EXPERIENCE = [
     id: "securitas",
     title: "Solutions Engineer / Project Manager / LATAM Clinical Educator / Developer",
     company: "Securitas Healthcare",
-    dates: "October 2024 - Present",
+    dates: "Oct. 2024 -- Present",
 
     // Badges displayed visually on each experience card
     badges: [
@@ -56,7 +56,7 @@ export const EXPERIENCE = [
     id: "entheospace",
     title: "Software Engineer",
     company: "Entheospace",
-    dates: "February 2024 - May 2025",
+    dates: "Feb. 2024 -- May 2025",
 
     badges: [" JS/PHP/SQL", " Full-stack", " Automation"],
 
@@ -72,7 +72,7 @@ export const EXPERIENCE = [
     id: "vclean",
     title: "Account Manager",
     company: "V-Clean",
-    dates: "2022 - 2023",
+    dates: "2022 -- 2023",
 
     badges: [" Client Success", " Sales Ops", " Quoting App"],
 
@@ -87,7 +87,7 @@ export const EXPERIENCE = [
     id: "boots",
     title: "Procurement Manager",
     company: "Jocelynne's Boots (Remote)",
-    dates: "2019 - 2022",
+    dates: "2019 -- 2022",
 
     badges: [" Sourcing", " Vendors", " Laser-Etch"],
 
@@ -102,7 +102,7 @@ export const EXPERIENCE = [
     id: "pharmtech",
     title: "Pharmacy Technician",
     company: "UMC Lubbock, Las Palmas Medical Center",
-    dates: "2019 - Present",
+    dates: "2019 -- Present",
 
     badges: [" Compounding", " Nursing Communication", " Patient Care"],
 
@@ -123,9 +123,14 @@ export const EXPERIENCE = [
 export const PROJECTS = [
   {
     name: "Machine Learning Tumor Classification",
+    featured: true,
     desc:
       "CNN model classifying brain tumor tissues from MRI scans. Achieved ~95% accuracy using RGB on >2,000 images.",
     tags: ["Python", "PyTorch", "CNN", "Medical Imaging"],
+    bullets: [
+      "Built a CNN with PyTorch to classify brain tumor tissues from MRI scans; achieved ~95% accuracy across 2,000+ RGB images.",
+      "Applied transfer learning and data augmentation to improve robustness on limited medical imaging datasets.",
+    ],
   },
   {
     name: "AI Face Detection",
@@ -135,27 +140,47 @@ export const PROJECTS = [
   },
   {
     name: "Project Management System",
+    featured: true,
     desc:
       "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
     tags: ["Next.js", "React", "Supabase", "Prisma ORM", "AI (OpenAI)", "TypeScript", "SQL"],
+    bullets: [
+      "Full-stack Next.js platform for coordinating multi-stage hospital RTLS deployments with sequential workflow stages, AI-powered email drafting (OpenAI), and a real-time project dashboard.",
+      "Supabase and Prisma ORM backend with TypeScript throughout; supports multi-site field engineer coordination with client info management and dark/light theme.",
+    ],
   },
   {
     name: "Dynamic System Architecture Builder",
+    featured: true,
     desc:
       "Desktop and online architecture-design platform for RTLS/HUGS environments. Expanded the original Tkinter + Graphviz builder with ELK auto-layout, a Next.js web implementation, shared configuration mapping, layout and PDF export APIs, URL-driven config loading, and professional SVG/PNG/PDF output generation for Cisco and Non-Cisco HA or singular deployments.",
     tags: ["Python", "Tkinter", "Next.js", "TypeScript", "ELK.js", "Graphviz", "ReportLab", "PyInstaller"],
+    bullets: [
+      "Desktop and web platform for designing Cisco and Non-Cisco RTLS/HUGS network architectures; desktop version packaged as a standalone Windows EXE via PyInstaller with Graphviz rendering.",
+      "Next.js web implementation with ELK.js auto-layout; exports professional SVG, PNG, and PDF diagrams via URL-driven configuration and a ReportLab pipeline.",
+    ],
   },
   {
     name: "Environmental Monitoring Analysis Tool",
+    featured: true,
     desc:
       "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
     tags: ["Python", "Flask", "openpyxl", "xlrd", "Rule Engine", "Excel Automation"],
+    bullets: [
+      "Python/Flask web app that parses Securitas MobileView exports and applies a configurable rule engine to cross-reference asset inventories and flag compliance and naming anomalies.",
+      "Drives interactive filtering dashboards and generates client-ready Excel reports for investigation and remediation planning.",
+    ],
   },
   {
     name: "LPMC Scheduler",
+    featured: true,
     desc:
       "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
     tags: ["Vite", "JavaScript", "Node.js", "Postgres", "Vercel Blob", "Excel Processing"],
+    bullets: [
+      "Responsive scheduling portal for Las Palmas Medical Center with public schedule viewing, admin Excel uploads, and PTO request and approval workflows.",
+      "Vite frontend with a Node/Vercel backend using Vercel Blob and Postgres for cloud-backed storage; includes local JSON fallbacks for offline development.",
+    ],
   },
   {
     name: "Jocelynne's Boots Invoice System",
@@ -177,9 +202,14 @@ export const PROJECTS = [
   },
   {
     name: "Engine Map Filter Application",
+    featured: true,
     desc:
       "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
     tags: ["Python", "Tkinter", "PyInstaller", "Fieldwire", "Windows"],
+    bullets: [
+      "Windows desktop app that filters and optimizes AeroScout Engine Map ZIP archives before Fieldwire uploads; auto-splits archives at the 200 MB limit and recombines partitions on demand.",
+      "Drag-and-drop batch processing with auto map-ID scanning and a map image collage viewer; packaged as a standalone EXE for hospital server deployment.",
+    ],
   },
   {
     name: "Aeroscout Log Filtering App",
@@ -209,7 +239,7 @@ export const EDUCATION = [
   {
     school: "University of Texas at El Paso",
     degree: "Bachelor of Science in Biochemistry and Computer Science",
-    dates: "2019 - 2024",
+    dates: "2019 -- 2024",
 
     // Achievements/honors under the degree
     bullets: [
