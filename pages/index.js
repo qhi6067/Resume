@@ -155,7 +155,7 @@ export default function Page() {
           </h1>
 
           <p className="hero-subtitle">
-            Tech · Healthcare · Strategy · B2B Sales
+            Healthcare Systems · Software &amp; AI · Technical Delivery
           </p>
 
           <div className="hero-languages">
@@ -186,7 +186,7 @@ export default function Page() {
           <div className="hero-stats">
             <div className="stat">
               <div className="stat-num-wrap">
-                <span className="stat-num" data-count="13">0</span>
+                <span className="stat-num" data-count={ProjectData.length}>0</span>
                 <span className="stat-suffix">+</span>
               </div>
               <span className="stat-label">Projects Built</span>

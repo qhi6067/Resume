@@ -80,7 +80,7 @@ function genProjects() {
   const featured = PROJECTS.filter(p => p.featured);
 
   const cards = featured.map(p => {
-    const tags = (p.tags || []).map(esc).join(', ');
+    const tags = (p.pdfTags || p.tags || []).map(esc).join(', ');
     const heading = tags
       ? `\\textbf{${esc(p.name)}} $|$ \\emph{${tags}}`
       : `\\textbf{${esc(p.name)}}`;
@@ -342,5 +342,10 @@ try {
 
 const pdfSrc  = join(latexDir, 'resume.pdf');
 const pdfDest = join(ROOT, 'public', 'Resume.pdf');
+const outputDir = join(ROOT, 'output', 'pdf');
+const outputDest = join(outputDir, 'Jaime_Perez_Resume.pdf');
+mkdirSync(outputDir, { recursive: true });
 copyFileSync(pdfSrc, pdfDest);
+copyFileSync(pdfSrc, outputDest);
 console.log(`✓ PDF saved to public/Resume.pdf`);
+console.log(`✓ PDF saved to output/pdf/Jaime_Perez_Resume.pdf`);

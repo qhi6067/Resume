@@ -25,29 +25,29 @@ export const CONTACT = {
 export const EXPERIENCE = [
   {
     id: "securitas",
-    title: "Solutions Engineer / Project Manager / LATAM Clinical Educator / Developer",
+    title: "Solutions Engineer / Technical Project Manager / Software Developer",
     company: "Securitas Healthcare",
-    dates: "Oct. 2024 -- Present",
+    dates: "Oct. 2024 - Present",
 
     // Badges displayed visually on each experience card
     badges: [
       " RF/RTLS",
       " Networking",
       " Hospitals",
-      " Training",
       " Project Management",
-      " Security"
+      " Software Development",
+      " AI & Automation",
+      " LATAM"
     ],
 
     // Bullet points displayed in the experience detail view
     bullets: [
-      "Lead end-to-end solution design and deployment of hospital-wide RTLS, infant protection (Hugs & Kisses), and environmental monitoring systems across multi-site health systems, translating clinical workflow requirements into Cisco networking, RF infrastructure, and server architectures.",
-      "Serve as the primary technical point of contact for hospital IT, clinical leadership, and executive stakeholders throughout the pre-sales and implementation lifecycle, scoping requirements, running solution demos, and driving technical wins from discovery through go-live.",
-      "Own the full LATAM portfolio as the sole bilingual (Spanish/English) solutions engineer, leading implementations across Puerto Rico, Costa Rica, and Mexico and expanding delivery capacity in markets previously underserved due to language and regional coverage gaps.",
-      "Manage project lifecycle for multi-site hospital deployments as assisting project manager, overseeing budgeting, vendor coordination, resource planning, deadline tracking, and escalation management across cross-functional teams.",
-      "Partner with sales, product, and engineering teams to troubleshoot complex integration issues spanning databases, authentication, certificates, and wireless infrastructure, reducing escalations and accelerating time-to-value for hospital customers.",
-      "Design and deliver bilingual clinical education programs, workshops, remote trainings, and go-live support for nursing, IT, and executive stakeholders, ensuring sustained adoption of patient safety technology in labor and delivery and other high-acuity units.",
-      "Develop internal Python and AI-assisted tooling to automate deployment documentation, technical analysis, and reporting workflows, applying full-stack and machine learning experience to reduce manual overhead for the implementation team."
+      "Lead end-to-end architecture and delivery for hospital-wide RTLS, Hugs & Kisses infant protection, and environmental monitoring systems, translating clinical workflows into Cisco wireless, RF, server, database, and high-availability designs.",
+      "Serve as the primary technical partner to hospital IT, clinical leaders, executives, and sales teams from discovery and solution demonstrations through implementation, validation, go-live, and post-deployment troubleshooting.",
+      "Own LATAM solution delivery as the sole bilingual English/Spanish solutions engineer, leading implementations across Puerto Rico, Costa Rica, and Mexico while adapting training and technical plans to regional teams and clinical environments.",
+      "Direct multi-site project execution across budgets, vendors, resource plans, milestones, risks, and escalations, coordinating engineering, product, sales, clinical, and customer teams around deployment readiness.",
+      "Diagnose complex production issues across wireless networks, Windows and Linux servers, SQL Server, Tomcat, ActiveMQ, authentication, certificates, and HA infrastructure; convert field evidence into repeatable diagnostic and remediation playbooks.",
+      "Build privacy-conscious engineering tools - including HAR/PCAP diagnostics, guarded configuration agents, architecture generators, and citation-grounded knowledge assistants - to standardize planning, troubleshooting, configuration, and knowledge transfer."
     ],
 
   },
@@ -56,7 +56,7 @@ export const EXPERIENCE = [
     id: "entheospace",
     title: "Software Engineer",
     company: "Entheospace",
-    dates: "Feb. 2024 -- May 2025",
+    dates: "Feb. 2024 - May 2025",
 
     badges: [" JS/PHP/SQL", " Full-stack", " Automation"],
 
@@ -72,7 +72,7 @@ export const EXPERIENCE = [
     id: "vclean",
     title: "Account Manager",
     company: "V-Clean",
-    dates: "2022 -- 2023",
+    dates: "2022 - 2023",
 
     badges: [" Client Success", " Sales Ops", " Quoting App"],
 
@@ -87,7 +87,7 @@ export const EXPERIENCE = [
     id: "boots",
     title: "Procurement Manager",
     company: "Jocelynne's Boots (Remote)",
-    dates: "2019 -- 2022",
+    dates: "2019 - 2022",
 
     badges: [" Sourcing", " Vendors", " Laser-Etch"],
 
@@ -102,7 +102,7 @@ export const EXPERIENCE = [
     id: "pharmtech",
     title: "Pharmacy Technician",
     company: "UMC Lubbock, Las Palmas Medical Center",
-    dates: "2019 -- Present",
+    dates: "2019 - Present",
 
     badges: [" Compounding", " Nursing Communication", " Patient Care"],
 
@@ -122,8 +122,85 @@ export const EXPERIENCE = [
 // ------------------------------------------------------------
 export const PROJECTS = [
   {
-    name: "Machine Learning Tumor Classification",
+    name: "MobileView HAR & Network Analyzer",
     featured: true,
+    desc:
+      "Local diagnostic platform that correlates HAR traffic, MobileView logs and configuration evidence, and PCAP/PCAPNG captures to explain performance and network failures. Combines a deterministic rule engine with grounded AI analysis, privacy screening, interactive network maps, multi-format reporting, and Docker or standalone Windows distribution.",
+    tags: ["TypeScript", "React", "Express", "PCAP/PCAPNG", "Rule Engine", "Anthropic API", "Docker"],
+    pdfTags: ["TypeScript", "React", "Express", "PCAP", "Docker"],
+    bullets: [
+      "Built a local React/TypeScript and Express platform that correlates HAR traffic, MobileView logs, configuration evidence, and PCAP/PCAPNG captures to isolate application and network delays.",
+      "Combined deterministic diagnostics with grounded AI narratives, sensitivity screening, interactive network maps, multi-format reports, and Docker or standalone Windows distribution.",
+    ],
+  },
+  {
+    name: "HUGS Configuration AI Agent",
+    featured: true,
+    desc:
+      "Safety-gated LangGraph system for configuring MobileView HUGS infant-protection environments. Converts site configuration sheets into validated intent, detects live drift, proposes a plan, requires human approval and administrator authorization before SOAP/SQL writes, then independently re-reads the system and produces an audit bundle.",
+    tags: ["Python", "LangGraph", "FastAPI", "SOAP", "SQL Server", "Docker", "Human-in-the-Loop"],
+    pdfTags: ["Python", "LangGraph", "SOAP", "SQL Server", "Docker"],
+    bullets: [
+      "Designed a two-agent LangGraph workflow that converts site configuration sheets into validated intent, detects live HUGS configuration drift, and produces an approval-ready change plan.",
+      "Enforced dry-run defaults, human approval, administrator authorization, deterministic SOAP/SQL adapters, independent read-back verification, and auditable results for safety-critical changes.",
+    ],
+  },
+  {
+    name: "Solar System Operations Hub",
+    featured: true,
+    desc:
+      "Secure local operations portal that presents approved healthcare engineering applications as an interactive 3D constellation. Includes schema-validated hot-reload registration, live health polling, signed sessions, role-based access, one-time confirmations for service-impacting actions, loopback-only reverse proxying, and managed process controls.",
+    tags: ["React", "TypeScript", "Three.js", "Express", "SQLite", "RBAC", "Vitest"],
+    pdfTags: ["React", "TypeScript", "Three.js", "Express", "Security"],
+    bullets: [
+      "Built a React/Three.js operations portal with deterministic 3D visualization, schema-validated app registration, live health polling, an accessible dashboard, and managed application processes.",
+      "Implemented signed sessions, role-based access, single-use confirmations for service-impacting actions, fail-closed exclusions, and loopback-only reverse proxy controls.",
+    ],
+  },
+  {
+    name: "MV J-Sage Knowledge Assistant",
+    featured: true,
+    desc:
+      "Local citation-grounded assistant for a 959-document MobileView and AeroScout knowledge corpus. Uses BM25 retrieval, symptom-vocabulary query expansion, tool-assisted re-query, source citations, Mermaid diagrams, and DOCX/PDF export while keeping raw customer references out of shipped artifacts.",
+    tags: ["TypeScript", "RAG", "React", "Express", "Anthropic API", "SQLite", "Docker"],
+    pdfTags: ["TypeScript", "RAG", "React", "SQLite", "Docker"],
+    bullets: [
+      "Created a citation-grounded RAG assistant for a 959-document MobileView/AeroScout corpus with BM25 retrieval, symptom-aware query expansion, tool-assisted re-query, and inline Mermaid diagrams.",
+      "Added DOCX/PDF export, local SQLite persistence, Docker packaging, and a sanitized-reference pipeline that prevents raw customer identifiers from entering shipped artifacts.",
+    ],
+  },
+  {
+    name: "Dynamic System Architecture Builder",
+    desc:
+      "Desktop and online architecture-design platform for RTLS/HUGS environments. Expanded the original Tkinter + Graphviz builder with ELK auto-layout, a Next.js web implementation, shared configuration mapping, layout and PDF export APIs, URL-driven config loading, and professional SVG/PNG/PDF output generation for Cisco and Non-Cisco HA or singular deployments.",
+    tags: ["Python", "Tkinter", "Next.js", "TypeScript", "ELK.js", "Graphviz", "ReportLab", "PyInstaller"],
+    bullets: [
+      "Desktop and web platform for designing Cisco and Non-Cisco RTLS/HUGS network architectures; desktop version packaged as a standalone Windows EXE via PyInstaller with Graphviz rendering.",
+      "Next.js web implementation with ELK.js auto-layout; exports professional SVG, PNG, and PDF diagrams via URL-driven configuration and a ReportLab pipeline.",
+    ],
+  },
+  {
+    name: "Environmental Monitoring Analysis Tool",
+    desc:
+      "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
+    tags: ["Python", "Flask", "openpyxl", "xlrd", "Rule Engine", "Excel Automation"],
+    bullets: [
+      "Python/Flask web app that parses Securitas MobileView exports and applies a configurable rule engine to cross-reference asset inventories and flag compliance and naming anomalies.",
+      "Drives interactive filtering dashboards and generates client-ready Excel reports for investigation and remediation planning.",
+    ],
+  },
+  {
+    name: "Project Management System",
+    desc:
+      "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
+    tags: ["Next.js", "React", "Supabase", "Prisma ORM", "AI (OpenAI)", "TypeScript", "SQL"],
+    bullets: [
+      "Full-stack Next.js platform for coordinating multi-stage hospital RTLS deployments with sequential workflow stages, AI-powered email drafting (OpenAI), and a real-time project dashboard.",
+      "Supabase and Prisma ORM backend with TypeScript throughout; supports multi-site field engineer coordination with client info management and dark/light theme.",
+    ],
+  },
+  {
+    name: "Machine Learning Tumor Classification",
     desc:
       "CNN model classifying brain tumor tissues from MRI scans. Achieved ~95% accuracy using RGB on >2,000 images.",
     tags: ["Python", "PyTorch", "CNN", "Medical Imaging"],
@@ -139,41 +216,7 @@ export const PROJECTS = [
     tags: ["Python", "OpenCV", "dlib", "Computer Vision"],
   },
   {
-    name: "Project Management System",
-    featured: true,
-    desc:
-      "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
-    tags: ["Next.js", "React", "Supabase", "Prisma ORM", "AI (OpenAI)", "TypeScript", "SQL"],
-    bullets: [
-      "Full-stack Next.js platform for coordinating multi-stage hospital RTLS deployments with sequential workflow stages, AI-powered email drafting (OpenAI), and a real-time project dashboard.",
-      "Supabase and Prisma ORM backend with TypeScript throughout; supports multi-site field engineer coordination with client info management and dark/light theme.",
-    ],
-  },
-  {
-    name: "Dynamic System Architecture Builder",
-    featured: true,
-    desc:
-      "Desktop and online architecture-design platform for RTLS/HUGS environments. Expanded the original Tkinter + Graphviz builder with ELK auto-layout, a Next.js web implementation, shared configuration mapping, layout and PDF export APIs, URL-driven config loading, and professional SVG/PNG/PDF output generation for Cisco and Non-Cisco HA or singular deployments.",
-    tags: ["Python", "Tkinter", "Next.js", "TypeScript", "ELK.js", "Graphviz", "ReportLab", "PyInstaller"],
-    bullets: [
-      "Desktop and web platform for designing Cisco and Non-Cisco RTLS/HUGS network architectures; desktop version packaged as a standalone Windows EXE via PyInstaller with Graphviz rendering.",
-      "Next.js web implementation with ELK.js auto-layout; exports professional SVG, PNG, and PDF diagrams via URL-driven configuration and a ReportLab pipeline.",
-    ],
-  },
-  {
-    name: "Environmental Monitoring Analysis Tool",
-    featured: true,
-    desc:
-      "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
-    tags: ["Python", "Flask", "openpyxl", "xlrd", "Rule Engine", "Excel Automation"],
-    bullets: [
-      "Python/Flask web app that parses Securitas MobileView exports and applies a configurable rule engine to cross-reference asset inventories and flag compliance and naming anomalies.",
-      "Drives interactive filtering dashboards and generates client-ready Excel reports for investigation and remediation planning.",
-    ],
-  },
-  {
     name: "LPMC Scheduler",
-    featured: true,
     desc:
       "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
     tags: ["Vite", "JavaScript", "Node.js", "Postgres", "Vercel Blob", "Excel Processing"],
@@ -202,7 +245,6 @@ export const PROJECTS = [
   },
   {
     name: "Engine Map Filter Application",
-    featured: true,
     desc:
       "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
     tags: ["Python", "Tkinter", "PyInstaller", "Fieldwire", "Windows"],
@@ -239,7 +281,7 @@ export const EDUCATION = [
   {
     school: "University of Texas at El Paso",
     degree: "Bachelor of Science in Biochemistry and Computer Science",
-    dates: "2019 -- 2024",
+    dates: "2019 - 2024",
 
     // Achievements/honors under the degree
     bullets: [
@@ -254,8 +296,8 @@ export const EDUCATION = [
 // LANGUAGES — Spoken languages
 // ------------------------------------------------------------
 export const LANGUAGES = [
-  "English — Native",
-  "Spanish — Fluent",
+  "English - Native",
+  "Spanish - Fluent",
 ];
 
 
@@ -266,15 +308,16 @@ export const LANGUAGES = [
 // ------------------------------------------------------------
 export const SKILLS = {
   programming: [
-    "Next.js",
     "Python",
-    "React",
-    "JavaScript",
     "TypeScript",
-    "jQuery",
-    "PHP",
+    "JavaScript",
     "SQL",
+    "Next.js",
+    "React",
+    "Node.js",
+    "Express",
     "Flask",
+    "PHP",
     "HTML/CSS",
     "API Integration",
   ],
@@ -296,10 +339,12 @@ export const SKILLS = {
     "Automation scripting",
     "Database design",
     "System integration",
+    "RAG & AI agent orchestration",
+    "Network traffic analysis",
+    "Privacy-aware local AI systems",
     "Excel data processing",
     "Rule-engine design",
     "Diagram generation & export pipelines",
-    "Responsive UI design",
   ],
 
   medical: [
@@ -333,13 +378,13 @@ export const SKILLS = {
 // Rendered as bullet list in Leadership section
 // ------------------------------------------------------------
 export const LEADERSHIP = [
-  "Assisting Project Manager — Securitas Healthcare Latin-American HUGS Projects",
-  "Volunteer/Member — American Heart Association, University Medical Center, Local Churches",
-  "Treasurer — Health Occupations Students of America (HOSA)",
-  "Member — Dr. Bernard Harris Pre-Medical Society (TTU), Coding Interview Club",
-  "Research Assistant — Texas Tech University, University of Texas at El Paso",
-  "Programming Assistant — Back-end development for small businesses & university projects",
-  "AI Club — Securitas Healthcare AI development playground developer and tester"
+  "Assistant Project Manager - Securitas Healthcare Latin-American HUGS Projects",
+  "Volunteer/Member - American Heart Association, University Medical Center, Local Churches",
+  "Treasurer - Health Occupations Students of America (HOSA)",
+  "Member - Dr. Bernard Harris Pre-Medical Society (TTU), Coding Interview Club",
+  "Research Assistant - Texas Tech University, University of Texas at El Paso",
+  "Programming Assistant - Back-end development for small businesses & university projects",
+  "AI Club - Securitas Healthcare AI development playground developer and tester"
 ];
 
 // ------------------------------------------------------------
@@ -347,6 +392,8 @@ export const LEADERSHIP = [
 // ------------------------------------------------------------
 export const TOOLS = [
   "Claude",
+  "Anthropic API",
+  "LangGraph",
   "ChatGPT",
   "Gemini",
   "Ollama",
