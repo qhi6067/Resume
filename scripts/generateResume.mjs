@@ -293,7 +293,8 @@ function buildDocument() {
     \\href{mailto:${CONTACT.email}}{\\underline{${esc(CONTACT.email)}}} $|$
     ${esc(CONTACT.location)} $|$
     ${esc(CONTACT.citizenship)} $|$
-    ${bilingual}
+    ${bilingual} \\\\ \\vspace{1pt}
+    \\href{${CONTACT.portfolio}}{\\underline{Portfolio: ${esc(CONTACT.portfolioLabel)}}}
 \\end{center}
 ${genSummary()}${genExperience()}${genProjects()}${genEducation()}${genSkillsAndTools()}${genLeadership()}
 %-------------------------------------------

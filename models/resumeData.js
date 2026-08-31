@@ -14,6 +14,8 @@ export const CONTACT = {
   location: "El Paso, Texas 79915",
   phone: "(915) 888-7009",
   email: "Jaime123perez43@gmail.com",
+  portfolio: "https://jaimeyperez.com/",
+  portfolioLabel: "jaimeyperez.com",
   citizenship: "US Citizen",
 };
 
