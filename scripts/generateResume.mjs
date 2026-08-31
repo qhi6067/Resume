@@ -16,10 +16,10 @@ const src = readFileSync(join(ROOT, 'models', 'resumeData.js'), 'utf8')
   .replace(/^export const /gm, 'const ');
 
 const {
-  CONTACT, EXPERIENCE, PROJECTS, EDUCATION,
+  CONTACT, SUMMARY, EXPERIENCE, PROJECTS, EDUCATION,
   SKILLS, TOOLS, LEADERSHIP, LANGUAGES,
 } = Function(`"use strict"; ${src};
-  return { CONTACT, EXPERIENCE, PROJECTS, EDUCATION, SKILLS, TOOLS, LEADERSHIP, LANGUAGES };
+  return { CONTACT, SUMMARY, EXPERIENCE, PROJECTS, EDUCATION, SKILLS, TOOLS, LEADERSHIP, LANGUAGES };
 `)();
 
 // ── LaTeX escaper ─────────────────────────────────────────────────────────────
@@ -55,6 +55,15 @@ function bilingualString() {
 }
 
 // ── Section generators ────────────────────────────────────────────────────────
+
+function genSummary() {
+  if (!SUMMARY) return '';
+  return `
+%-----------SUMMARY-----------
+\\section{Professional Summary}
+  \\small{${esc(SUMMARY)}}
+`;
+}
 
 function genExperience() {
   const jobs = EXPERIENCE.map(job => `
@@ -286,7 +295,7 @@ function buildDocument() {
     ${esc(CONTACT.citizenship)} $|$
     ${bilingual}
 \\end{center}
-${genExperience()}${genProjects()}${genEducation()}${genSkillsAndTools()}${genLeadership()}
+${genSummary()}${genExperience()}${genProjects()}${genEducation()}${genSkillsAndTools()}${genLeadership()}
 %-------------------------------------------
 \\end{document}
 `;
