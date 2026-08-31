@@ -126,6 +126,7 @@ export const EXPERIENCE = [
 export const PROJECTS = [
   {
     name: "Gateway Architectural Designer",
+    portfolioRank: 7,
     featured: true,
     desc:
       "Local-first engineering application for planning Securitas Healthcare gateway placement across multi-floor hospitals. Imports PDF and image floor plans, aligns and calibrates them to real-world scale, projects gateway stacks between floors, simulates estimated coverage, supports interactive 2D and 3D review, and exports portable project files and multi-page engineering PDFs. Packaged as a self-contained Windows application with no cloud dependency.",
@@ -138,18 +139,20 @@ export const PROJECTS = [
   },
   {
     name: "MobileView HAR & Network Analyzer",
+    portfolioRank: 1,
     featured: true,
     desc:
-      "Local diagnostic platform that correlates HAR traffic, MobileView logs and configuration evidence, and PCAP/PCAPNG captures to explain performance and network failures. Combines a deterministic rule engine with grounded AI analysis, privacy screening, interactive network maps, multi-format reporting, and Docker or standalone Windows distribution.",
-    tags: ["TypeScript", "React", "Express", "PCAP/PCAPNG", "Rule Engine", "Anthropic API", "Docker"],
-    pdfTags: ["TypeScript", "React", "Express", "PCAP", "Docker"],
+      "Local diagnostic and RAG platform that correlates HAR traffic, MobileView logs and configuration evidence, PCAP/PCAPNG captures, and retrieved product knowledge to explain performance and network failures. Combines a deterministic rule engine with citation-grounded AI analysis, privacy screening, interactive network maps, multi-format reporting, and Docker or standalone Windows distribution.",
+    tags: ["TypeScript", "RAG", "React", "Express", "PCAP/PCAPNG", "Rule Engine", "Anthropic API", "Docker"],
+    pdfTags: ["TypeScript", "RAG", "Express", "PCAP", "Docker"],
     bullets: [
-      "Built a local React/TypeScript and Express platform that correlates HAR traffic, MobileView logs, configuration evidence, and PCAP/PCAPNG captures to isolate application and network delays.",
-      "Combined deterministic diagnostics with grounded AI narratives, sensitivity screening, interactive network maps, multi-format reports, and Docker or standalone Windows distribution.",
+      "Built a local React/TypeScript and Express platform that correlates HAR traffic, MobileView logs, configuration evidence, PCAP/PCAPNG captures, and RAG-retrieved product knowledge to isolate application and network delays.",
+      "Combined deterministic diagnostics with citation-grounded AI narratives, sensitivity screening, interactive network maps, multi-format reports, and Docker or standalone Windows distribution.",
     ],
   },
   {
     name: "HUGS Configuration AI Agent",
+    portfolioRank: 2,
     featured: true,
     desc:
       "Safety-gated LangGraph system for configuring MobileView HUGS infant-protection environments. Converts site configuration sheets into validated intent, detects live drift, proposes a plan, requires human approval and administrator authorization before SOAP/SQL writes, then independently re-reads the system and produces an audit bundle.",
@@ -162,6 +165,7 @@ export const PROJECTS = [
   },
   {
     name: "Solar System Operations Hub",
+    portfolioRank: 8,
     desc:
       "Secure local operations portal that presents approved healthcare engineering applications as an interactive 3D constellation. Includes schema-validated hot-reload registration, live health polling, signed sessions, role-based access, one-time confirmations for service-impacting actions, loopback-only reverse proxying, and managed process controls.",
     tags: ["React", "TypeScript", "Three.js", "Express", "SQLite", "RBAC", "Vitest"],
@@ -173,6 +177,7 @@ export const PROJECTS = [
   },
   {
     name: "MV J-Sage Knowledge Assistant",
+    portfolioRank: 3,
     featured: true,
     desc:
       "Local citation-grounded assistant for a 959-document MobileView and AeroScout knowledge corpus. Uses BM25 retrieval, symptom-vocabulary query expansion, tool-assisted re-query, source citations, Mermaid diagrams, and DOCX/PDF export while keeping raw customer references out of shipped artifacts.",
@@ -185,6 +190,7 @@ export const PROJECTS = [
   },
   {
     name: "Dynamic System Architecture Builder",
+    portfolioRank: 9,
     desc:
       "Desktop and online architecture-design platform for RTLS/HUGS environments. Expanded the original Tkinter + Graphviz builder with ELK auto-layout, a Next.js web implementation, shared configuration mapping, layout and PDF export APIs, URL-driven config loading, and professional SVG/PNG/PDF output generation for Cisco and Non-Cisco HA or singular deployments.",
     tags: ["Python", "Tkinter", "Next.js", "TypeScript", "ELK.js", "Graphviz", "ReportLab", "PyInstaller"],
@@ -195,6 +201,7 @@ export const PROJECTS = [
   },
   {
     name: "Environmental Monitoring Analysis Tool",
+    portfolioRank: 10,
     desc:
       "Local Python web application for analyzing Securitas MobileView environmental monitoring exports. Built a configurable rule engine to cross-reference asset and tag inventories, flag compliance and naming anomalies, drive interactive filtering dashboards, and export client-ready Excel reports for investigation and remediation planning.",
     tags: ["Python", "Flask", "openpyxl", "xlrd", "Rule Engine", "Excel Automation"],
@@ -205,6 +212,7 @@ export const PROJECTS = [
   },
   {
     name: "Project Management System",
+    portfolioRank: 5,
     desc:
       "Full-stack Next.js platform for managing multi-stage hospital implementation projects. Features sequential workflow stages, AI-powered email generation, client info management, Supabase integration, Prisma ORM, and a real-time dashboard with dark/light theme toggle. Designed for field engineers coordinating deployments across multiple hospital sites.",
     tags: ["Next.js", "React", "Supabase", "Prisma ORM", "AI (OpenAI)", "TypeScript", "SQL"],
@@ -215,6 +223,7 @@ export const PROJECTS = [
   },
   {
     name: "Machine Learning Tumor Classification",
+    portfolioRank: 4,
     desc:
       "CNN model classifying brain tumor tissues from MRI scans. Achieved ~95% accuracy using RGB on >2,000 images.",
     tags: ["Python", "PyTorch", "CNN", "Medical Imaging"],
@@ -225,12 +234,14 @@ export const PROJECTS = [
   },
   {
     name: "AI Face Detection",
+    portfolioRank: 6,
     desc:
       "dlib + OpenCV face detection with ~96% accuracy; bounding-box overlays with robust performance.",
     tags: ["Python", "OpenCV", "dlib", "Computer Vision"],
   },
   {
     name: "LPMC Scheduler",
+    portfolioRank: 11,
     desc:
       "Responsive scheduling portal for Las Palmas Medical Center supporting public pharmacist and tech schedule viewing, admin Excel uploads, PTO request submission and approval workflows, downloadable schedule files, and durable cloud-backed storage. Built with a Vite frontend and Node/Vercel deployment flow using Blob storage and Postgres, with local JSON/file fallbacks for offline development.",
     tags: ["Vite", "JavaScript", "Node.js", "Postgres", "Vercel Blob", "Excel Processing"],
@@ -241,24 +252,28 @@ export const PROJECTS = [
   },
   {
     name: "Jocelynne's Boots Invoice System",
+    portfolioRank: 14,
     desc:
       "Next.js invoicing and operations dashboard for a custom boot business with login flow, client and product management, invoice creation, printable invoice detail pages, status updates, notifications, and Supabase-backed persistence. Structured as a modern admin workspace with reusable UI components and dashboard views for clients, products, invoices, and settings.",
     tags: ["Next.js", "React", "TypeScript", "Supabase", "Tailwind CSS", "Invoice Workflow"],
   },
   {
     name: "Project Milestone Tracker",
+    portfolioRank: 13,
     desc:
       "Mobile-first project tracking web app built with Vite and Supabase. Features role-based access (admin/user), real-time workflow step tracking across 5 milestone phases, progress circle visualization, admin user creation portal, project archiving, and full Supabase-backed persistence. Deployed to Vercel.",
     tags: ["Vite", "Supabase", "JavaScript", "Role-Based Auth", "Vercel"],
   },
   {
     name: "Inventory Management System",
+    portfolioRank: 16,
     desc:
       "Full-stack inventory app automating stock tracking and updates to optimize operations for various company use.",
     tags: ["JavaScript", "PHP", "SQL", "jQuery", "Full-stack"],
   },
   {
     name: "Engine Map Filter Application",
+    portfolioRank: 12,
     desc:
       "Windows desktop app for filtering and optimizing AeroScout Engine Map ZIP archives before Fieldwire uploads. Features drag-and-drop batch processing, auto map-ID scanning, checkboxes for ID selection, configurable output folder, automatic archive splitting for Fieldwire's 200 MB limit, partition recombination, and a map image collage viewer. Packaged as a standalone EXE for hospital server deployment.",
     tags: ["Python", "Tkinter", "PyInstaller", "Fieldwire", "Windows"],
@@ -269,23 +284,26 @@ export const PROJECTS = [
   },
   {
     name: "Aeroscout Log Filtering App",
+    portfolioRank: 15,
     desc:
       "Desktop application for parsing and analyzing Aeroscout MobileView logs with time-window grouping. Features drag-and-drop processing and automated Excel reporting to accelerate system troubleshooting and diagnostics.",
     tags: ["Python", "Tkinter", "openpyxl", "PyInstaller"],
   },
   {
     name: "Particle Simulator",
+    portfolioRank: 17,
     desc:
       "Python/Django + SQLite simulator; scraped periodic-table data and modeled particle interactions (mass/charge).",
     tags: ["Python", "Django", "SQLite", "Web Scraping"],
   },
   {
     name: "Sias' Salt E-Commerce",
+    portfolioRank: 18,
     desc:
       "Premium product landing page for an artisan salt brand featuring custom visual design, responsive navigation, polished motion, immersive hero treatment, Supabase integration, and Three.js-driven presentation touches to create a more elevated online shopping experience.",
     tags: ["HTML", "CSS", "JavaScript", "Supabase", "Three.js", "Responsive Design"],
   },
-];
+].sort((a, b) => a.portfolioRank - b.portfolioRank);
 
 
 // ------------------------------------------------------------
