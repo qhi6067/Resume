@@ -122,6 +122,16 @@ export const EXPERIENCE = [
 // ------------------------------------------------------------
 export const PROJECTS = [
   {
+    name: "Gateway Architectural Designer",
+    desc:
+      "Local-first engineering application for planning Securitas Healthcare gateway placement across multi-floor hospitals. Imports PDF and image floor plans, aligns and calibrates them to real-world scale, projects gateway stacks between floors, simulates estimated coverage, supports interactive 2D and 3D review, and exports portable project files and multi-page engineering PDFs. Packaged as a self-contained Windows application with no cloud dependency.",
+    tags: ["React", "TypeScript", "Three.js", "Konva", "PDF.js", "IndexedDB", "Vitest"],
+    bullets: [
+      "Built a local-first React/TypeScript tool for importing, aligning, and calibrating multi-floor hospital plans, then placing vertically projected gateway stacks with per-floor adjustments and estimated coverage overlays.",
+      "Added interactive 2D/3D review, IndexedDB autosave, portable project archives, high-resolution engineering PDF export, automated tests, and self-contained Windows distribution.",
+    ],
+  },
+  {
     name: "MobileView HAR & Network Analyzer",
     featured: true,
     desc:
