@@ -20,7 +20,7 @@ export const CONTACT = {
 };
 
 export const SUMMARY =
-  "Solutions engineer and software developer specializing in hospital RTLS, infant protection, and clinical infrastructure. Leads bilingual U.S./LATAM delivery across wireless, RF, servers, databases, and high-availability environments while building local-first AI and automation tools that make planning, diagnostics, configuration, and knowledge transfer safer and more repeatable.";
+  "Solutions engineer, software developer, and technical project manager specializing in hospital RTLS, infant protection, and clinical infrastructure. Manages bilingual U.S./LATAM projects across solution design, stakeholder coordination, implementation, and go-live while building local-first AI and automation tools that make planning, diagnostics, configuration, and knowledge transfer safer and more repeatable.";
 
 
 // ------------------------------------------------------------
