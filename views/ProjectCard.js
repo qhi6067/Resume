@@ -11,7 +11,7 @@ import { useState, useEffect, useRef } from "react";
  *
  * Mobile (compact): collapses to title only; "Expand" reveals content.
  */
-export function ProjectCard({ name, desc, tags, compact = false, index = 0 }) {
+export function ProjectCard({ name, desc, tags, link, linkLabel = "Open project ↗", compact = false, index = 0 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const descRef = useRef(null);
@@ -109,6 +109,17 @@ export function ProjectCard({ name, desc, tags, compact = false, index = 0 }) {
               </span>
             ))}
           </div>
+
+          {link && (
+            <a
+              className="project-link"
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {linkLabel}
+            </a>
+          )}
         </>
       )}
     </article>

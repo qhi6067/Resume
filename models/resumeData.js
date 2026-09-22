@@ -127,6 +127,21 @@ export const EXPERIENCE = [
 // ------------------------------------------------------------
 export const PROJECTS = [
   {
+    name: "InterviewOS Integration Training Hub",
+    portfolioRank: 0,
+    featured: true,
+    desc:
+      "A tabbed interview-practice workspace that connects three focused labs: Flightlab for drone integrations and C2, RESTcraft for HTTP/API fluency, and SystemForge for system-design interviews. Includes guided missions, simulated failures, browser-saved progress, and a local launcher for running the full practice environment together.",
+    tags: ["Next.js", "JavaScript", "REST APIs", "WebSockets", "C2", "System Design", "Vercel"],
+    pdfTags: ["JavaScript", "REST APIs", "WebSockets", "System Design"],
+    link: "https://interviewos-hub.vercel.app",
+    linkLabel: "Open training hub ↗",
+    bullets: [
+      "Built a single tabbed workspace that embeds three interactive training applications while preserving each lab's local browser state and hands-on exercises.",
+      "Added beginner-friendly missions covering WebSockets, REST/SOAP decisions, authentication, retries, C2 data flow, capacity estimates, reliability tradeoffs, and interview rehearsal.",
+    ],
+  },
+  {
     name: "Gateway Architectural Designer",
     portfolioRank: 7,
     featured: true,
