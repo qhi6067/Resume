@@ -1,6 +1,28 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
+/** Fan-out node glyph — reads as a system diagram at 13px. */
+function SchematicGlyph() {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="9" y="2" width="6" height="5" rx="1.2" />
+      <rect x="2" y="17" width="6" height="5" rx="1.2" />
+      <rect x="16" y="17" width="6" height="5" rx="1.2" />
+      <path d="M12 7v6M5 17v-4h14v4" />
+    </svg>
+  );
+}
+
 /**
  * ProjectCard
  *
@@ -10,8 +32,21 @@ import { useState, useEffect, useRef } from "react";
  *   - All cards in a row are equal height via CSS grid stretch.
  *
  * Mobile (compact): collapses to title only; "Expand" reveals content.
+ *
+ * `architecture` is a Mermaid diagram string; when present the card shows an
+ * Architecture button that hands the project up to the viewer.
  */
-export function ProjectCard({ name, desc, tags, link, linkLabel = "Open project ↗", compact = false, index = 0 }) {
+export function ProjectCard({
+  name,
+  desc,
+  tags,
+  link,
+  linkLabel = "Open project ↗",
+  compact = false,
+  index = 0,
+  architecture,
+  onShowArchitecture,
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const descRef = useRef(null);
@@ -110,15 +145,31 @@ export function ProjectCard({ name, desc, tags, link, linkLabel = "Open project 
             ))}
           </div>
 
-          {link && (
-            <a
-              className="project-link"
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {linkLabel}
-            </a>
+          {(architecture || link) && (
+            <div className="project-actions">
+              {architecture && (
+                <button
+                  type="button"
+                  className="arch-btn"
+                  onClick={onShowArchitecture}
+                  aria-label={`View the ${name} architecture diagram`}
+                >
+                  <SchematicGlyph />
+                  Architecture
+                </button>
+              )}
+
+              {link && (
+                <a
+                  className="project-link"
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {linkLabel}
+                </a>
+              )}
+            </div>
           )}
         </>
       )}

@@ -17,6 +17,7 @@ import {
   LANGUAGES as LanguagesData,
   TOOLS as ToolsData,
 } from "../models/resumeData";
+import { ARCHITECTURE } from "../models/architectureData";
 
 // Views
 import { SectionTitle } from "../views/SectionTitle";
@@ -25,14 +26,25 @@ import { ExperienceSlots } from "../views/ExperienceSlots";
 import { ProjectCard } from "../views/ProjectCard";
 import { WelcomeOverlay } from "../views/WelcomeOverlay";
 import { BB8Toggle } from "../views/BB8Toggle";
+import { ArchitectureModal } from "../views/ArchitectureModal";
 
 // Section IDs used by dot nav and scroll tracking
 const SECTION_IDS = ["hero", "experience", "projects", "education", "skills", "tools", "leadership"];
+
+// Projects joined with their architecture diagrams (kept in a separate model so
+// resume/PDF generation stays driven purely by resumeData).
+const PROJECTS_WITH_ARCHITECTURE = ProjectData.map((project) => {
+  const arch = ARCHITECTURE[project.name];
+  return arch
+    ? { ...project, architecture: arch.diagram, architectureSummary: arch.summary }
+    : project;
+});
 
 export default function Page() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [isMobileProjects, setIsMobileProjects] = useState(false);
+  const [archProject, setArchProject] = useState(null);
   const expandBtnRef = useRef(null);
   // true = DARK (checked), false = LIGHT (unchecked)
   const [isDark, setIsDark] = useState(true);
@@ -85,8 +97,9 @@ export default function Page() {
   };
 
   const initialProjectCount = isMobileProjects ? 3 : 6;
-  const visibleProjects = showAllProjects ? ProjectData : ProjectData.slice(0, initialProjectCount);
-  const remainingProjects = Math.max(ProjectData.length - initialProjectCount, 0);
+  const allProjects = PROJECTS_WITH_ARCHITECTURE;
+  const visibleProjects = showAllProjects ? allProjects : allProjects.slice(0, initialProjectCount);
+  const remainingProjects = Math.max(allProjects.length - initialProjectCount, 0);
 
   return (
     <>
@@ -246,13 +259,14 @@ export default function Page() {
                       {...project}
                       index={index}
                       compact={isMobileProjects}
+                      onShowArchitecture={() => setArchProject(project)}
                     />
                   </div>
                 </Fragment>
               ))}
             </div>
 
-            {ProjectData.length > initialProjectCount && (
+            {allProjects.length > initialProjectCount && (
               <button
                 ref={expandBtnRef}
                 type="button"
@@ -273,7 +287,7 @@ export default function Page() {
                   ? "↑ Show Less"
                   : isMobileProjects
                     ? `Show ${remainingProjects} More ↓`
-                    : `Show All ${ProjectData.length} Projects ↓`}
+                    : `Show All ${allProjects.length} Projects ↓`}
               </button>
             )}
           </section>
@@ -366,6 +380,14 @@ export default function Page() {
 
         </div>{/* end .content-wrap */}
       </main>
+
+      {archProject && (
+        <ArchitectureModal
+          project={archProject}
+          isDark={isDark}
+          onClose={() => setArchProject(null)}
+        />
+      )}
     </>
   );
 }

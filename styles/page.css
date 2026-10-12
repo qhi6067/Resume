@@ -1852,3 +1852,363 @@ body::after {
 
 .bb8-toggle__checkbox:active + .bb8-toggle__container .bb8__head-container { transform: rotate(25deg); }
 .bb8-toggle__checkbox:checked:active + .bb8-toggle__container .bb8__head-container { transform: rotate(-25deg); }
+
+
+/* =====================================================
+   ARCHITECTURE — card trigger + schematic viewer
+   The diagram sits on a drafting-board grid: these are
+   engineering schematics, so the surface says so.
+   ===================================================== */
+
+/* ── Card action row: keeps the trigger and the live link on one baseline
+      and pinned to the bottom edge of every card in a row ── */
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.project-actions .project-link {
+  margin-top: 0;
+}
+
+/* Violet reads as "internal structure"; cyan stays reserved for live links. */
+.arch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 5px 12px 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--violet);
+  background: var(--violet-glow);
+  border: 1px solid rgba(157, 111, 255, 0.28);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-base) ease,
+    transform var(--dur-base) var(--ease-spring);
+}
+
+.arch-btn:hover {
+  color: var(--text-1);
+  border-color: rgba(157, 111, 255, 0.55);
+  box-shadow: 0 0 20px var(--violet-glow);
+  transform: translateY(-1px);
+}
+
+.arch-btn svg {
+  flex-shrink: 0;
+  opacity: 0.92;
+}
+
+/* ── Overlay ── */
+.arch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.arch-backdrop {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: none;
+  background: rgba(1, 6, 12, 0.78);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  cursor: pointer;
+  animation: arch-fade var(--dur-base) var(--ease-out) both;
+}
+
+.arch-sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1320px, 100%);
+  height: min(900px, 100%);
+  background: var(--surface-2);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--cyan-border);
+  border-radius: var(--r-lg);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  overflow: hidden;
+  animation: arch-rise var(--dur-slow) var(--ease-out) both;
+}
+
+@keyframes arch-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes arch-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes arch-slide {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Header ── */
+.arch-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.arch-head-text {
+  min-width: 0;
+}
+
+.arch-title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-1);
+}
+
+.arch-summary {
+  margin-top: 5px;
+  max-width: 74ch;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.arch-close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.arch-close:hover {
+  color: var(--cyan);
+  border-color: var(--cyan-border);
+}
+
+/* ── Drafting surface ── */
+.arch-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none; /* pointer handlers own pan + pinch */
+  background-color: rgba(3, 9, 18, 0.5);
+  background-image:
+    linear-gradient(rgba(0, 212, 240, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 240, 0.055) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.arch-stage-grabbing {
+  cursor: grabbing;
+}
+
+.arch-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: opacity var(--dur-slow) ease;
+}
+
+.arch-canvas > svg {
+  display: block;
+  overflow: visible;
+}
+
+.arch-canvas[data-sized="true"] > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.arch-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: center;
+  color: var(--text-3);
+}
+
+.arch-state-error {
+  color: var(--amber);
+}
+
+/* ── Footer controls ── */
+.arch-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 18px;
+  padding-bottom: calc(11px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border);
+  background: rgba(6, 14, 26, 0.5);
+}
+
+.arch-zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.arch-zoom button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.arch-zoom button:hover {
+  color: var(--cyan);
+  border-color: var(--cyan-border);
+}
+
+.arch-zoom-level {
+  min-width: 48px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+  color: var(--text-3);
+}
+
+.arch-fit {
+  width: auto !important;
+  padding: 0 11px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.arch-hint {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-3);
+}
+
+/* ── Keyboard focus ── */
+.arch-btn:focus-visible,
+.arch-close:focus-visible,
+.arch-zoom button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* ── Light theme ── */
+[data-theme="light"] .arch-backdrop {
+  background: rgba(12, 25, 41, 0.52);
+}
+
+[data-theme="light"] .arch-sheet {
+  box-shadow:
+    0 30px 80px rgba(12, 25, 41, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+[data-theme="light"] .arch-stage {
+  background-color: rgba(255, 255, 255, 0.72);
+  background-image:
+    linear-gradient(rgba(0, 128, 160, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 128, 160, 0.075) 1px, transparent 1px);
+}
+
+[data-theme="light"] .arch-foot {
+  background: rgba(240, 245, 251, 0.7);
+}
+
+[data-theme="light"] .arch-btn {
+  color: var(--violet);
+  background: rgba(91, 33, 182, 0.07);
+  border-color: rgba(91, 33, 182, 0.26);
+}
+
+[data-theme="light"] .arch-btn:hover {
+  color: #3b1480;
+  border-color: rgba(91, 33, 182, 0.5);
+}
+
+/* ── Phone: full-bleed sheet that rises from the bottom ── */
+@media (max-width: 768px) {
+  .arch-overlay {
+    padding: 0;
+  }
+
+  .arch-sheet {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    animation-name: arch-slide;
+  }
+
+  .arch-head {
+    padding: 14px 16px 12px;
+  }
+
+  .arch-title {
+    font-size: 15px;
+  }
+
+  .arch-summary {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 12px;
+  }
+
+  .arch-foot {
+    padding: 9px 12px;
+    padding-bottom: calc(9px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .arch-stage {
+    background-size: 24px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .arch-hint {
+    display: none;
+  }
+}
