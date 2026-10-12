@@ -242,11 +242,11 @@ export const PROJECTS = [
     name: "Machine Learning Tumor Classification",
     portfolioRank: 4,
     desc:
-      "CNN model classifying brain tumor tissues from MRI scans. Achieved ~95% accuracy using RGB on >2,000 images.",
-    tags: ["Python", "PyTorch", "CNN", "Medical Imaging"],
+      "CNN model classifying brain tumor tissues from MRI scans. Achieved ~93% test accuracy across 7,000+ images spanning four tumor classes.",
+    tags: ["Python", "Keras", "CNN", "Medical Imaging"],
     bullets: [
-      "Built a CNN with PyTorch to classify brain tumor tissues from MRI scans; achieved ~95% accuracy across 2,000+ RGB images.",
-      "Applied transfer learning and data augmentation to improve robustness on limited medical imaging datasets.",
+      "Built a CNN with Keras to classify brain tumor tissues from MRI scans; achieved ~93% test accuracy across 7,000+ RGB images in four tumor classes.",
+      "Trained a from-scratch two-block Conv2D network over 20 epochs, evaluating on a 656-image held-out test set with a confusion matrix and per-class report.",
     ],
   },
   {
