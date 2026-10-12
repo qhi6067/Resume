@@ -11,6 +11,52 @@
 // ------------------------------------------------------------
 
 export const ARCHITECTURE = {
+  "Aside macOS AI Assistant": {
+    summary:
+      "Hotkey-driven Electron overlay whose main process gathers screenshots, read-only project excerpts, web page text and Swift-helper call audio, then routes each ask to Anthropic, OpenAI, Codex or Claude Code; it keeps a local question log and saves full sessions only when asked.",
+    diagram: `
+flowchart TD
+  KEYS["Global shortcuts"]
+  subgraph UI["Renderer"]
+    PANEL["Overlay panel"]
+  end
+  BRIDGE["Preload IPC bridge"]
+  subgraph M["Main process"]
+    ASK["Ask orchestrator"]
+    LISTEN["Listening controller"]
+    CAP["Screen capture"]
+    PAGE["Web page extractor"]
+    SRC["Project source tools"]
+    STT["Transcription"]
+    ROUTE["Provider router"]
+  end
+  HELPER["Swift audio helper"]
+  STORE[("Config, log &amp; sessions")]
+  subgraph P["AI providers"]
+    API["Anthropic &amp; OpenAI API"]
+    CLI["Codex &amp; Claude Code"]
+  end
+  KEYS -->|"ask actions"| ASK
+  KEYS -->|"listen toggle"| LISTEN
+  PANEL -->|"typed asks"| BRIDGE
+  BRIDGE -->|"IPC"| ASK
+  ASK -->|"answer events"| BRIDGE
+  BRIDGE --> PANEL
+  LISTEN -->|"spawns"| HELPER
+  HELPER -->|"16 kHz PCM"| STT
+  STT -->|"transcript"| ASK
+  CAP -->|"screenshot"| ASK
+  PAGE -->|"page text"| ASK
+  SRC -->|"source excerpts"| ASK
+  ASK -->|"prompt"| ROUTE
+  ROUTE -->|"tool calls"| SRC
+  ROUTE -->|"streaming"| API
+  ROUTE --> CLI
+  ASK -->|"log &amp; sessions"| STORE
+  STORE -->|"keys &amp; settings"| ROUTE
+`,
+  },
+
   "InterviewOS Integration Training Hub": {
     summary:
       "Buildless static hub deployed from GitHub to Vercel: it embeds Flightlab, RESTcraft and bundled SystemForge lessons in iframes, keeps progress in browser localStorage, and runs practice code in a sandboxed iframe plus disposable Web Worker that loads Pyodide and sql.js from the jsDelivr CDN.",
