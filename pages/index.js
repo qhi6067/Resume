@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // Controllers
 import { useRevealOnScroll } from "../controller/useRevealOnScroll";
@@ -31,6 +31,9 @@ import { ArchitectureModal } from "../views/ArchitectureModal";
 // Section IDs used by dot nav and scroll tracking
 const SECTION_IDS = ["hero", "experience", "projects", "education", "skills", "tools", "leadership"];
 
+// Projects arrive a batch at a time rather than all at once.
+const PROJECT_PAGE_SIZE = 5;
+
 // Projects joined with their architecture diagrams (kept in a separate model so
 // resume/PDF generation stays driven purely by resumeData).
 const PROJECTS_WITH_ARCHITECTURE = ProjectData.map((project) => {
@@ -42,10 +45,12 @@ const PROJECTS_WITH_ARCHITECTURE = ProjectData.map((project) => {
 
 export default function Page() {
   const [showWelcome, setShowWelcome] = useState(true);
-  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(PROJECT_PAGE_SIZE);
   const [isMobileProjects, setIsMobileProjects] = useState(false);
   const [archProject, setArchProject] = useState(null);
-  const expandBtnRef = useRef(null);
+  const pagerRef = useRef(null);
+  // Count before the last batch landed, so only the new cards animate in.
+  const lastCountRef = useRef(PROJECT_PAGE_SIZE);
   // true = DARK (checked), false = LIGHT (unchecked)
   const [isDark, setIsDark] = useState(true);
 
@@ -96,10 +101,25 @@ export default function Page() {
     });
   };
 
-  const initialProjectCount = isMobileProjects ? 3 : 6;
   const allProjects = PROJECTS_WITH_ARCHITECTURE;
-  const visibleProjects = showAllProjects ? allProjects : allProjects.slice(0, initialProjectCount);
-  const remainingProjects = Math.max(allProjects.length - initialProjectCount, 0);
+  const visibleProjects = allProjects.slice(0, visibleCount);
+  const remainingProjects = allProjects.length - visibleCount;
+  const nextBatchSize = Math.min(PROJECT_PAGE_SIZE, remainingProjects);
+  const isShowingExtra = visibleCount > PROJECT_PAGE_SIZE;
+
+  const loadMoreProjects = () => {
+    lastCountRef.current = visibleCount;
+    setVisibleCount((count) => Math.min(count + PROJECT_PAGE_SIZE, allProjects.length));
+  };
+
+  const collapseProjects = () => {
+    lastCountRef.current = PROJECT_PAGE_SIZE;
+    setVisibleCount(PROJECT_PAGE_SIZE);
+    // Scroll back to the control once the grid has shrunk.
+    setTimeout(() => {
+      pagerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
+  };
 
   return (
     <>
@@ -253,42 +273,38 @@ export default function Page() {
 
             <div className="grid" data-stagger>
               {visibleProjects.map((project, index) => (
-                <Fragment key={project.name}>
-                  <div className={index >= initialProjectCount ? "reveal-instant" : ""}>
-                    <ProjectCard
-                      {...project}
-                      index={index}
-                      compact={isMobileProjects}
-                      onShowArchitecture={() => setArchProject(project)}
-                    />
-                  </div>
-                </Fragment>
+                <div
+                  key={project.name}
+                  className={index >= lastCountRef.current ? "reveal-instant" : ""}
+                >
+                  <ProjectCard
+                    {...project}
+                    index={index}
+                    compact={isMobileProjects}
+                    onShowArchitecture={() => setArchProject(project)}
+                  />
+                </div>
               ))}
             </div>
 
-            {allProjects.length > initialProjectCount && (
-              <button
-                ref={expandBtnRef}
-                type="button"
-                className="expand-btn"
-                onClick={() => {
-                  if (showAllProjects) {
-                    // Collapse first, then scroll to button after layout settles
-                    setShowAllProjects(false);
-                    setTimeout(() => {
-                      expandBtnRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-                    }, 50);
-                  } else {
-                    setShowAllProjects(true);
-                  }
-                }}
-              >
-                {showAllProjects
-                  ? "↑ Show Less"
-                  : isMobileProjects
-                    ? `Show ${remainingProjects} More ↓`
-                    : `Show All ${allProjects.length} Projects ↓`}
-              </button>
+            {allProjects.length > PROJECT_PAGE_SIZE && (
+              <div className="projects-pager" ref={pagerRef}>
+                <p className="pager-count" aria-live="polite">
+                  Showing {visibleCount} of {allProjects.length}
+                </p>
+
+                {remainingProjects > 0 && (
+                  <button type="button" className="expand-btn" onClick={loadMoreProjects}>
+                    Load {nextBatchSize} more ↓
+                  </button>
+                )}
+
+                {isShowingExtra && (
+                  <button type="button" className="pager-less" onClick={collapseProjects}>
+                    ↑ Show less
+                  </button>
+                )}
+              </div>
             )}
           </section>
 

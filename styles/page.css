@@ -827,6 +827,47 @@ body::after {
    EXPAND BUTTON
 ============================== */
 
+.projects-pager {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+/* The pager owns its own spacing. */
+.projects-pager .expand-btn {
+  margin: 0;
+}
+
+.pager-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
+}
+
+.pager-less {
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--dur-fast) ease;
+}
+
+.pager-less:hover {
+  color: var(--cyan);
+}
+
+.pager-less:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
 .expand-btn {
   display: block;
   margin: 28px auto 0;
