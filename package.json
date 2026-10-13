@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "generate-resume": "node scripts/generateResume.mjs"
+    "generate-resume": "node scripts/generateResume.mjs",
+    "test": "node test/panzoom.test.mjs"
   },
   "dependencies": {
     "mermaid": "^12.1.0",

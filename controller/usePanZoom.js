@@ -17,6 +17,37 @@ const NARROW_VIEWPORT = 560;
 const clampScale = (k) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, k));
 
 /**
+ * New view for a drag, from the baseline captured when the gesture began.
+ * Pure, so the gesture math can be tested without a browser.
+ */
+export function panView(base, origin, now) {
+  return {
+    k: base.k,
+    x: base.x + (now.x - origin.x),
+    y: base.y + (now.y - origin.y),
+  };
+}
+
+/**
+ * New view for a pinch. Holds the point under the original pinch centre fixed
+ * while the fingers spread, then follows the centre as it drifts so pinching
+ * and dragging feel like one gesture. Pure, for the same reason as panView.
+ */
+export function pinchView(base, origin, baseSpread, now, dist, rect) {
+  const k = clampScale(base.k * (dist / baseSpread));
+  const ratio = k / base.k;
+
+  const ax = origin.x - rect.left;
+  const ay = origin.y - rect.top;
+
+  return {
+    k,
+    x: ax - (ax - base.x) * ratio + (now.x - origin.x),
+    y: ay - (ay - base.y) * ratio + (now.y - origin.y),
+  };
+}
+
+/**
  * usePanZoom
  *
  * Drives a translate/scale transform on a content layer inside a fixed-size
@@ -37,6 +68,11 @@ export function usePanZoom() {
   // Live pointers, keyed by pointerId, plus the in-flight gesture baseline.
   const pointers = useRef(new Map());
   const gesture = useRef(null);
+
+  // A gesture baseline read from state can be a frame stale, which makes a
+  // pinch jump at the moment the second finger lands. Track it live instead.
+  const viewRef = useRef(view);
+  viewRef.current = view;
 
   /** Read the diagram's intrinsic size from its viewBox (transform-independent). */
   const measure = useCallback(() => {
@@ -135,6 +171,32 @@ export function usePanZoom() {
     return () => container.removeEventListener("wheel", onWheel);
   }, [zoomAt]);
 
+  // iOS Safari pinch-zooms the page on two fingers even where touch-action is
+  // none, and drives it through its own non-standard gesture events. Swallow
+  // both so the pinch scales the diagram instead of the whole page.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const swallow = (e) => e.preventDefault();
+    const onTouchMove = (e) => {
+      if (e.touches.length > 1) e.preventDefault();
+    };
+
+    const opts = { passive: false };
+    container.addEventListener("gesturestart", swallow, opts);
+    container.addEventListener("gesturechange", swallow, opts);
+    container.addEventListener("gestureend", swallow, opts);
+    container.addEventListener("touchmove", onTouchMove, opts);
+
+    return () => {
+      container.removeEventListener("gesturestart", swallow, opts);
+      container.removeEventListener("gesturechange", swallow, opts);
+      container.removeEventListener("gestureend", swallow, opts);
+      container.removeEventListener("touchmove", onTouchMove, opts);
+    };
+  }, []);
+
   // Re-fit when the viewport resizes (orientation change, window drag).
   useEffect(() => {
     const container = containerRef.current;
@@ -164,16 +226,21 @@ export function usePanZoom() {
     e.currentTarget.setPointerCapture?.(e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-    const live = pointers.current.values();
     if (pointers.current.size === 1) {
-      gesture.current = { type: "pan", origin: centroid(live), view: { ...view } };
+      gesture.current = {
+        type: "pan",
+        origin: centroid(pointers.current.values()),
+        view: { ...viewRef.current },
+      };
       setIsPanning(true);
-    } else if (pointers.current.size === 2) {
+    } else if (pointers.current.size >= 2) {
+      // Rebase on every extra finger so a pinch can start from a pan, and so a
+      // third finger landing does not leave a stale baseline behind.
       gesture.current = {
         type: "pinch",
-        origin: centroid(live),
+        origin: centroid(pointers.current.values()),
         spread: spread(pointers.current.values()),
-        view: { ...view },
+        view: { ...viewRef.current },
       };
       setIsPanning(false);
     }
@@ -190,34 +257,23 @@ export function usePanZoom() {
     if (!container) return;
 
     if (active.type === "pan" && pointers.current.size === 1) {
-      const now = centroid(pointers.current.values());
-      setView({
-        k: active.view.k,
-        x: active.view.x + (now.x - active.origin.x),
-        y: active.view.y + (now.y - active.origin.y),
-      });
+      setView(panView(active.view, active.origin, centroid(pointers.current.values())));
       return;
     }
 
     if (active.type === "pinch" && pointers.current.size >= 2) {
-      const now = centroid(pointers.current.values());
-      const dist = spread(pointers.current.values());
       if (!active.spread) return;
 
-      const rect = container.getBoundingClientRect();
-      const k = clampScale(active.view.k * (dist / active.spread));
-      const ratio = k / active.view.k;
-
-      // Anchor the zoom on the original pinch center, then follow the
-      // fingers as they drift so pinch and pan feel like one gesture.
-      const ax = active.origin.x - rect.left;
-      const ay = active.origin.y - rect.top;
-
-      setView({
-        k,
-        x: ax - (ax - active.view.x) * ratio + (now.x - active.origin.x),
-        y: ay - (ay - active.view.y) * ratio + (now.y - active.origin.y),
-      });
+      setView(
+        pinchView(
+          active.view,
+          active.origin,
+          active.spread,
+          centroid(pointers.current.values()),
+          spread(pointers.current.values()),
+          container.getBoundingClientRect()
+        )
+      );
     }
   };
 
@@ -229,7 +285,7 @@ export function usePanZoom() {
       gesture.current = {
         type: "pan",
         origin: centroid(pointers.current.values()),
-        view: { ...view },
+        view: { ...viewRef.current },
       };
       setIsPanning(true);
     } else if (pointers.current.size === 0) {
@@ -251,8 +307,10 @@ export function usePanZoom() {
       onPointerDown,
       onPointerMove,
       onPointerUp: endPointer,
+      // No onPointerLeave: with pointer capture it fires spuriously on iOS when
+      // a finger strays past the stage edge, which dropped a live pinch back to
+      // a pan mid-gesture. Up and cancel already cover every real end.
       onPointerCancel: endPointer,
-      onPointerLeave: endPointer,
     },
   };
 }
