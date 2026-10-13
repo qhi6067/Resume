@@ -50,8 +50,8 @@ flowchart TD
   SRC -->|"source excerpts"| ASK
   ASK -->|"prompt"| ROUTE
   ROUTE -->|"tool calls"| SRC
-  ROUTE -->|"streaming"| API
-  ROUTE --> CLI
+  ROUTE <-->|"prompt + stream"| API
+  ROUTE <-->|"prompt + output"| CLI
   ASK -->|"log &amp; sessions"| STORE
   STORE -->|"keys &amp; settings"| ROUTE
 `,
@@ -79,14 +79,14 @@ flowchart TD
   HUB -->|"iframe"| FL
   HUB -->|"iframe"| RC
   HUB -->|"same origin"| SF
-  FL -->|"localhost"| NODE["Local Node server"]
+  FL <-->|"WebSocket"| NODE["Local Node server"]
   FL --> EXT["Hosted lab links"]
   RC -->|"published"| EXT
   subgraph Sandbox["Code sandbox"]
     SBX["Sandboxed iframe"] -->|"spawns"| WK["Web Worker"]
   end
   MODES -->|"run code"| SBX
-  WK -->|"Pyodide + sql.js"| CDN["jsDelivr CDN"]
+  WK <-->|"loads runtimes"| CDN["jsDelivr CDN"]
 `,
   },
 
@@ -121,9 +121,9 @@ flowchart TD
   FB --> RULES
   RULES -->|"findings"| AI
   INST --> REF
-  AI -->|"grounding"| REF
-  AI --> ANTH
-  AI --> OLL
+  AI <-->|"grounding"| REF
+  AI <-->|"prompt + analysis"| ANTH
+  AI <-->|"prompt + analysis"| OLL
   AI -->|"narrative"| RPT
   RPT --> API
   API -->|"spawn"| PCAPP
@@ -152,16 +152,15 @@ flowchart TD
   OP --> UI
   SI --> UI
   UI --> PLAN
-  PLAN -->|"read live config"| WS
-  PLAN --> DB
+  PLAN <-->|"read live config"| WS
+  PLAN <-->|"read params"| DB
   PLAN --> BUNDLE
   PLAN --> GATE
   GATE -->|"approved"| APPLY
   APPLY -->|"event specs"| WS
   APPLY -->|"config params"| ADMIN
   APPLY --> VAL
-  VAL -->|"verify"| DB
-`,
+  VAL <-->|"verify"| DB`,
   },
 
   "MV J-Sage Knowledge Assistant": {
@@ -191,12 +190,12 @@ flowchart TD
   SSE -->|"HTTP + SSE"| RT
   RT --> AI
   AI --> TOOLS
-  AI -->|"streaming"| EXT
+  AI <-->|"prompt + stream"| EXT
   TOOLS --> RET
   TOOLS --> ART
-  TOOLS --> IDX
-  RET --> CORPUS
-  RT -->|"history"| DB
+  TOOLS <-->|"lookups"| IDX
+  RET <-->|"retrieval"| CORPUS
+  RT <-->|"history"| DB
   HUB -->|"proxy + health"| RT
 `,
   },
@@ -275,8 +274,8 @@ flowchart TD
   EMAIL --> MAIL
   EMAIL --> DS
   ART -->|"fs read"| FS
-  DS --> SUPA
-  AISVC --> AIAPI
+  DS <-->|"queries"| SUPA
+  AISVC <-->|"prompt + draft"| AIAPI
   MAIL --> SMTP
   LEG -.->|"migrated"| SUPA
 `,
@@ -396,14 +395,13 @@ flowchart LR
   API --> JOBS
   API --> AI
   REG --> MAN
-  JOBS --> DB
+  JOBS <-->|"job state"| DB
   JOBS --> WS
   JOBS -->|"tool adapters"| APPS
   PROXY -->|"proxies"| APPS
   PROC -->|"spawns"| APPS
-  HEALTH -->|"polls"| APPS
-  AI --> ANTH
-`,
+  HEALTH <-->|"polls"| APPS
+  AI <-->|"prompt + reply"| ANTH`,
   },
 
   "Dynamic System Architecture Builder": {
@@ -517,8 +515,8 @@ flowchart TD
   RT --> AU
   RT -->|"parse Excel"| PR
   RT --> SO
-  RT -->|"uploads"| BL
-  SO -->|"SQL"| PG
+  RT <-->|"uploads"| BL
+  SO <-->|"SQL"| PG
   SO -.->|"no DB env"| LO
 `,
   },
@@ -587,8 +585,8 @@ flowchart TD
   UI --> RT
   RT --> AC
   AC --> DL
-  AC -->|"session"| AU
-  DL -->|"RLS queries"| PG
+  AC <-->|"session"| AU
+  DL <-->|"RLS queries"| PG
   DL -->|"invoke"| EF
   EF -->|"admin ops"| AU
   EF --> PG
@@ -628,7 +626,7 @@ flowchart TD
   PAGES --> I18N
   I18N -->|"persists"| LS
   PAGES -->|"read / mutate"| CRUD
-  CRUD --> STORE
+  CRUD <-->|"reads + writes"| STORE
   SEED -->|"hydrates"| STORE
 `,
   },
@@ -696,10 +694,10 @@ flowchart TD
   UI --> JQ
   JQ -->|"HTTP"| ROUTE
   ROUTE --> AUTH
-  AUTH -->|"verify"| USERS
+  AUTH <-->|"verify"| USERS
   AUTH --> LOGIC
   LOGIC --> QUERY
-  QUERY --> ITEMS
+  QUERY <-->|"SQL"| ITEMS
   QUERY --> TXN
   LOGIC -->|"threshold"| REPORT
   QUERY -->|"JSON rows"| JQ
@@ -729,17 +727,16 @@ flowchart TD
     EXT["ptable.com"]
     DB[("SQLite")]
 
-    UI -->|"loads library"| CDN
+    UI <-->|"loads library"| CDN
     UI -->|"HTTP GET"| URL
     URL --> VIEW
     URL --> ADMIN
     VIEW --> GEN
     GEN -->|"atomic mass"| PE
     PE --> SEL
-    SEL -->|"scrapes DOM"| EXT
+    SEL <-->|"scrapes DOM"| EXT
     VIEW -->|"HTML + JSON"| UI
-    ADMIN -->|"ORM"| DB
-`,
+    ADMIN <-->|"ORM"| DB`,
   },
 
   "Sias' Salt E-Commerce": {
@@ -769,9 +766,9 @@ flowchart TD
     UI -->|"cart &amp; forms"| LS
     LS -->|"mirrors writes"| SB
     UI -->|"checkout"| SC
-    SB --> SUPA
+    SB <-->|"reads + writes"| SUPA
     SC -->|"redirect"| STR
-    UI -.->|"loads libs"| CDN
+    UI <-.->|"loads libs"| CDN
 `,
   },
 };
