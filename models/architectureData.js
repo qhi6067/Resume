@@ -11,6 +11,67 @@
 // ------------------------------------------------------------
 
 export const ARCHITECTURE = {
+  "JARVIS Personal AI Command Center": {
+    summary:
+      "Caddy on AWS EC2 serves a public guest demo and gates the owner's React app on a Google session. The Fastify API answers chat with a no-model mail check, an approval-gated Gmail and Calendar tool agent, or an orchestrator that tries the Claude Code plan before metered API keys; Postgres keeps sealed keys and approvals, and dev terminals run on a sandboxed worker.",
+    diagram: `
+flowchart TD
+  subgraph WEB["Browser"]
+    APP["Owner React app"]
+    GUEST["Guest demo"]
+  end
+  SM["AWS Secrets Manager"]
+  subgraph HOST["AWS EC2 host"]
+    EDGE["Caddy edge"]
+    subgraph API["Fastify API"]
+      AUTH["Owner auth"]
+      CHAT["Chat router"]
+      RELAY["Dev terminal relay"]
+      DAILY["Daily mail pipeline"]
+      AGENT["Tool agent"]
+      ORCH["Route orchestrator"]
+      APPROVE["Sealed approvals"]
+    end
+    RUNNER["Claude Code runner"]
+    DB[("Postgres 17")]
+  end
+  DEV["Worker dev agent"]
+  BOX["Sandbox containers"]
+  GID["Google sign-in"]
+  GAPI["Gmail &amp; Calendar"]
+  LLM["Anthropic &amp; OpenAI"]
+  PKG["GitHub, registries &amp; model APIs"]
+  BK[("S3 &amp; EBS backups")]
+  APP -->|"HTTPS"| EDGE
+  GUEST -->|"static files"| EDGE
+  SM -->|"tmpfs secrets"| HOST
+  EDGE -->|"session check"| AUTH
+  EDGE -->|"/v1 chat"| CHAT
+  EDGE <-->|"SSE + input"| RELAY
+  GID <-->|"OIDC"| AUTH
+  AUTH <-->|"sessions"| DB
+  CHAT -->|"check email"| DAILY
+  CHAT -->|"mail &amp; calendar"| AGENT
+  CHAT -->|"other asks"| ORCH
+  DAILY <-->|"Primary inbox"| GAPI
+  DAILY <-->|"tasks"| DB
+  AGENT <-->|"reads"| GAPI
+  AGENT <-->|"tool calls"| LLM
+  AGENT -->|"writes"| APPROVE
+  EDGE -->|"owner confirms"| APPROVE
+  APPROVE <-->|"sealed rows"| DB
+  APPROVE <-->|"once confirmed"| GAPI
+  ORCH <-->|"plan first"| RUNNER
+  RUNNER <-->|"Claude plan"| LLM
+  ORCH <-->|"metered keys"| LLM
+  ORCH <-->|"keys &amp; spend"| DB
+  DEV <-->|"signed poll"| RELAY
+  DEV -->|"one per session"| BOX
+  BOX <-->|"allowlist proxy"| PKG
+  DB -->|"nightly dump"| BK
+`,
+  },
+
   "Aside macOS AI Assistant": {
     summary:
       "Hotkey-driven Electron overlay whose main process gathers screenshots, read-only project excerpts, web page text and Swift-helper call audio, then routes each ask to Anthropic, OpenAI, Codex or Claude Code; it keeps a local question log and saves full sessions only when asked.",
