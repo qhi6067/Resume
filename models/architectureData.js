@@ -41,7 +41,7 @@ flowchart TD
   GAPI["Gmail &amp; Calendar"]
   LLM["Anthropic &amp; OpenAI"]
   PKG["GitHub, registries &amp; model APIs"]
-  BK[("S3 &amp; EBS backups")]
+  BK[("S3 backup bucket")]
   APP -->|"HTTPS"| EDGE
   GUEST -->|"static files"| EDGE
   SM -->|"tmpfs secrets"| HOST
@@ -52,10 +52,10 @@ flowchart TD
   AUTH <-->|"sessions"| DB
   CHAT -->|"check email"| DAILY
   CHAT -->|"mail &amp; calendar"| AGENT
-  CHAT -->|"other asks"| ORCH
+  CHAT -->|"other asks + mail snippets"| ORCH
   DAILY <-->|"Primary inbox"| GAPI
   DAILY <-->|"tasks"| DB
-  AGENT <-->|"reads"| GAPI
+  AGENT <-->|"reads, drafts, labels"| GAPI
   AGENT <-->|"tool calls"| LLM
   AGENT -->|"writes"| APPROVE
   EDGE -->|"owner confirms"| APPROVE
@@ -65,10 +65,10 @@ flowchart TD
   RUNNER <-->|"Claude plan"| LLM
   ORCH <-->|"metered keys"| LLM
   ORCH <-->|"keys &amp; spend"| DB
-  DEV <-->|"signed poll"| RELAY
+  DEV <-->|"signed HTTPS poll"| RELAY
   DEV -->|"one per session"| BOX
   BOX <-->|"allowlist proxy"| PKG
-  DB -->|"nightly dump"| BK
+  DB -->|"nightly pg_dump"| BK
 `,
   },
 

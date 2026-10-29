@@ -130,14 +130,14 @@ export const PROJECTS = [
     name: "JARVIS Personal AI Command Center",
     portfolioRank: 0,
     desc:
-      "Personal AI command center live at jarvisjp.dev. After Google sign-in, a phone-first React app chats across Gmail, Calendar, tasks and code: inbox checks run without a model, mail and calendar asks go to a tool-calling agent on a metered API key, and other questions try the owner's Claude Code plan first. Sending, archiving or trashing mail and writing to Calendar each wait for a sealed, single-use approval. A dev terminal runs in sandboxed containers on a separate worker, and a public guest demo replays recorded answers with no AI calls.",
+      "Personal AI command center live at jarvisjp.dev. After Google sign-in, a phone-first React app chats across Gmail, Calendar and tasks and helps with code. Inbox checks run without a model, mail and calendar asks go to a tool-calling agent on a metered API key, and other questions try the owner's Claude Code plan first. Before JARVIS sends, archives or trashes mail or writes to Calendar, the owner must confirm a sealed, single-use approval. A dev terminal runs in sandboxed containers on a separate worker, and a public guest demo replays recorded answers with no AI calls.",
     tags: ["React", "TypeScript", "Fastify", "PostgreSQL", "Anthropic API", "OpenAI API", "Google APIs", "Docker", "AWS"],
     pdfTags: ["TypeScript", "React", "Fastify", "PostgreSQL", "AWS"],
     link: "https://jarvisjp.dev",
     linkLabel: "Open JARVIS ↗",
     bullets: [
       "Built a Google-authenticated React and Fastify command center at jarvisjp.dev whose chat routes each ask to a no-model inbox check, a Gmail/Calendar tool agent, or an orchestrator that tries the Claude Code plan before metered, capped API keys.",
-      "Sealed every send, archive, and calendar write behind expiring single-use approvals, relayed a dev terminal to sandboxed worker containers, and ran the stack as hardened Docker Compose on AWS EC2 with tmpfs secrets, nightly S3 backups, and restore-proven cutovers.",
+      "Gated chat-initiated mail sends, archives, and Calendar writes behind sealed, expiring single-use approvals, relayed a dev terminal to sandboxed worker containers, and ran the stack as hardened Docker Compose on AWS EC2 with tmpfs secrets, nightly S3 backups, and restore-proven cutovers.",
     ],
   },
   {
