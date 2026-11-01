@@ -34,6 +34,34 @@ const SECTION_IDS = ["hero", "experience", "projects", "education", "skills", "t
 // Projects arrive a batch at a time rather than all at once.
 const PROJECT_PAGE_SIZE = 5;
 
+// Website-only experience: keep models/resumeData.js and public/Resume.pdf unchanged.
+const ONLINE_EXPERIENCE = [
+  {
+    id: "forward-deployment-engineer",
+    title: "Forward Deployment Engineer",
+    company: "Confidential Employer",
+    dates: "11/26 – Current",
+    badges: [
+      " Software Engineering",
+      " Systems Architecture",
+      " Client Deployments",
+      " APIs & Integrations",
+      " Automation",
+    ],
+    bullets: [
+      "End-to-End Engineering Ownership: Drive complex, client-facing technical deployments spanning solution architecture, custom software development, systems integration, and production readiness.",
+      "Software Engineering & Automation: Architect and develop scalable applications, APIs, automation frameworks, and custom integrations to solve complex operational challenges.",
+      "Forward-Deployed Problem Solving: Operate at the intersection of software engineering, systems architecture, and field execution, transforming ambiguous business requirements into production-grade technical solutions.",
+      "Mission-Critical Systems Delivery: Engineer reliable, high-performance solutions across distributed environments, addressing infrastructure complexity, system interoperability, and production optimization.",
+    ],
+  },
+  ...ExperienceData.map((role) =>
+    role.id === "securitas"
+      ? { ...role, dates: "Oct. 2024 - Oct. 2026" }
+      : role
+  ),
+];
+
 // Projects joined with their architecture diagrams (kept in a separate model so
 // resume/PDF generation stays driven purely by resumeData).
 const PROJECTS_WITH_ARCHITECTURE = ProjectData.map((project) => {
@@ -262,7 +290,7 @@ export default function Page() {
             <SectionTitle num={1} pill="← → keys or swipe">
               Professional Experience
             </SectionTitle>
-            <ExperienceSlots items={ExperienceData} />
+            <ExperienceSlots items={ONLINE_EXPERIENCE} />
           </section>
 
           {/* ══════════════════════════════════════
