@@ -38,7 +38,7 @@ const PROJECT_PAGE_SIZE = 5;
 const ONLINE_EXPERIENCE = [
   {
     id: "forward-deployment-engineer",
-    title: "Forward Deployment Engineer",
+    title: "Forward Deployed Engineer (FDE)",
     company: "Confidential Employer",
     dates: "11/26 – Current",
     badges: [
